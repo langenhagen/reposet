@@ -23,6 +23,11 @@ repositories.
 - `list-sets`
 - `apply` (any given `bash` command or series of commands)
 
+After you set up your first reposet, just call `reposet <command> [<reposet>...]`, to trigger a
+command.
+See below for further information.
+You can also call `reposet <command> --help`.
+
 The project is structured as follows:
 ```
 .
