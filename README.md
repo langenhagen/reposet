@@ -15,13 +15,13 @@ repositories.
 `Reposet` is written in `bash` and does not require additional dependencies besides `git`.
 
 `Reposet` supports following commands:
-    - `pull`
-    - `push`
-    - `sync` (combined `pull`/`push`)
-    - `status`
-    - `list`
-    - `list-sets`
-    - `apply` (any given `bash` command or series of commands)
+- `pull`
+- `push`
+- `sync` (combined `pull`/`push`)
+- `status`
+- `list`
+- `list-sets`
+- `apply` (any given `bash` command or series of commands)
 
 The project is structured as follows:
 ```
@@ -199,7 +199,6 @@ Happy coding!
 ## TODO
 - implement `reposet-sync`
 - finish help msg for `reposet`
-- make a `gif`
 - write `README.md`
     - mention helper function to support uniformity.
     - mention in the coding section that common variables exist and that they are updated indirectly
