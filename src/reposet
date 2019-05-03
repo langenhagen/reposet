@@ -1,0 +1,59 @@
+#!/bin/bash
+#
+# Contains the command 'reposet'.
+# Dispatches to the given subcommands or prints the help-message.
+#
+# author: andreasl
+
+function show_usage {
+    #TODO
+    true
+}
+
+function show_version {
+    printf 'Reposet version %s\n' '0.1.0'
+}
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+if [ "$#" -gt '0' ] ; then
+    subcommand="$1"
+    shift
+    case "${subcommand}" in
+    -h|--help|help)
+        show_usage
+        ;;
+    -v|--version|version)
+        show_version
+        ;;
+    apply)
+        bash "${script_dir}/reposet-apply" "$@"
+        ;;
+    list-sets|sets)
+        bash "${script_dir}/reposet-list-sets" "$@"
+        ;;
+    list|ls)
+        bash "${script_dir}/reposet-list" "$@"
+        ;;
+    pull|down)
+        bash "${script_dir}/reposet-pull" "$@"
+        ;;
+    push|up)
+        bash "${script_dir}/reposet-push" "$@"
+        ;;
+    status)
+        bash "${script_dir}/reposet-status" "$@"
+        ;;
+    sync)
+        bash "${script_dir}/reposet-sync" "$@"
+        ;;
+    *) # unknown option
+        first_reposet="$subcommand"
+        bash "${script_dir}/reposet-status" "$first_reposet" "$@"
+        ;;
+    esac
+else
+    bash "${script_dir}/reposet-status.sh"
+fi
+
+exit "$?"

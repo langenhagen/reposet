@@ -1,0 +1,73 @@
+#!/bin/bash
+#
+# Pushes the local default branches to the default remotes and branches.
+#
+# author: andreasl
+
+function show_usage {
+    script_name="${0##*/}"
+
+    msg="${script_name}\n"
+    msg="${msg}Pushes the local default branches to the default remotes and branches.\n"
+    msg="${msg}Aborts and reports as soon as an error occurs.\n"
+    msg="${msg}If no errors are catched, runs \`git status --short --untracked-files\` for each"
+    msg="${msg} repo afterwards.\n"
+    msg="${msg}\n"
+    msg="${msg}Usage:\n"
+    msg="${msg}  ${script_name} [<reposet>...]\n"
+    msg="${msg}\n"
+    msg="${msg}Examples:\n"
+    msg="${msg}  ${script_name}                  # calls \`git push\` on all repos in the default reposet\n"
+    msg="${msg}  ${script_name} my               # calls \`git push\` on all repos in the reposet \"my\"\n"
+    msg="${msg}  ${script_name} my work          # calls \`git push\` on all repos in the reposets \"my\" and \"work\"\n"
+    msg="${msg}  ${script_name} -h               # prints the usage message\n"
+    msg="${msg}  ${script_name} --help           # prints the usage message\n"
+    printf "$msg"
+}
+
+while [ $# -gt 0 ] ; do
+    case "$1" in
+    -h|--help)
+        show_usage
+        exit 0
+        ;;
+    *) # reposet name / unknown option
+        break
+        ;;
+    esac
+    shift # past argument or value
+done
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=src/reposet.inc.sh
+source "${script_dir}/reposet.inc.sh"
+load_reposets_or_die "$@"
+
+for repo in "${_repos[@]}"; do
+    set_common_repo_variables "$repo"
+    n_current_repo++
+    cd_to_repo_or_die 1
+    print_current_repo_and_progress
+    check_if_local_branch_exists_or_die 2
+
+    git push "$push_remote" "$local_branch":"$push_branch"
+    code="$?"
+    if [ "$code" == 1 ] ; then
+        continue # 1 is "no new changes" on gerrit
+    elif [ "$code" != 0 ] ; then
+        msg="Calling \`git push ${rb}${push_remote} ${local_branch}${r}:${rb}${push_branch}${r}\`"
+        msg="${msg} on the repo ${rb}${repo_path}${r} failed:"
+        if [ "$code" == 128 ] ; then
+            msg="${msg} Do you have access rights?\n"
+            error_msgs="${error_msgs}${msg}"
+            >&2 printf -- "${r}$msg${n}\n"
+        else
+            msg="${msg} Unknown reason.\n"
+            die "$msg" 4 "cd \"${repo_path}\""
+        fi
+    fi
+done
+
+print_all_repos_status_or_die 5
+
+>&2 printf -- "${r}${error_msgs}${n}\n"

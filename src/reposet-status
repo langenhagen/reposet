@@ -1,0 +1,42 @@
+#!/bin/bash
+#
+# Calls `git status --branch --short --untracked-files` on the repos.
+#
+# author: andreasl
+
+function show_usage {
+    script_name="${0##*/}"
+
+    msg="${script_name}\n"
+    msg="${msg}Calls \`git status --branch --short --untracked-files\` on each repository in the"
+    msg="${msg} given reposets and returns the output in a concise format.\n"
+    msg="${msg}\n"
+    msg="${msg}Usage:\n"
+    msg="${msg} ${script_name} [<reposet>...]\n"
+    msg="${msg}\n"
+    msg="${msg}Examples:\n"
+    msg="${msg}  ${script_name}                  # calls \`git status -bsu\` on the default reposet\n"
+    msg="${msg}  ${script_name} my               # calls \`git status -bsu\` on the reposet 'my'\n"
+    msg="${msg}  ${script_name} my work          # calls \`git status -bsu\` on the reposets 'my' and 'work'\n"
+    msg="${msg}  ${script_name} -h               # prints the usage message\n"
+    msg="${msg}  ${script_name} --help           # prints the usage message\n"
+    printf "$msg"
+}
+
+while [ "$#" -gt '0' ] ; do
+    case "$1" in
+    -h|--help)
+        show_usage
+        exit 0
+        ;;
+    *) # reposet name / unknown option
+        break
+        ;;
+    esac
+    shift # past argument or value
+done
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+bash "${script_dir}/reposet-apply" -q "$@" -- \
+    'printf "%s" "$PWD"; printf "%0.s~" $(seq ${#PWD} 45); git status -bsu'

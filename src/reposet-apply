@@ -1,0 +1,67 @@
+#!/bin/bash
+#
+# Calls a given bash command or series of commands on each repository in the given reposets.
+#
+# author: andreasl
+
+function show_usage {
+    script_name="${0##*/}"
+
+    msg="${script_name}\n"
+    msg="${msg}Calls a given bash command or series of commands on each repository in the given"
+    msg="${msg} reposets.\n"
+    msg="${msg}\n"
+    msg="${msg}Usage:\n"
+    msg="${msg}  ${script_name} [-q|--quiet] [<reposet>...] [-- <command>]\n"
+    msg="${msg}\n"
+    msg="${msg}Examples:\n"
+    msg="${msg}  ${script_name}                    # lists all repositories in the default reposet\n"
+    msg="${msg}  ${script_name} my                 # lists all repositories in the reposet \"my\"\n"
+    msg="${msg}  ${script_name} my work            # lists all repositories in the reposet \"my\" and \"work\"\n"
+    msg="${msg}  ${script_name} -- ls              # lists all repositories and calls \`ls\` on the path of all git repos\n"
+    msg="${msg}  ${script_name} -q -- ls           # calls \`ls\` on the path of all git repos but does not list the git repos\n"
+    msg="${msg}  ${script_name} -q -- 'echo $PWD'  # prints the path of each git repo\n"
+    msg="${msg}  ${script_name} -h                 # prints the usage message\n"
+    msg="${msg}  ${script_name} --help             # prints the usage message\n"
+    msg="${msg}\n"
+    msg="${msg}Note:\n"
+    msg="${msg}  If you want to use subshell related-variables, like e.g. \$PWD, wrap them into"
+    msg="${msg} single quotation marks '' so that they will not be expanded immediately.\n"
+    printf "$msg"
+}
+
+reposets=()
+while [ $# -gt 0 ] ; do
+    case "$1" in
+    -q|--quiet)
+        quiet=true
+        ;;
+    --)
+        shift # past argument
+        command="$*"
+        break
+        ;;
+    -h|--help)
+        show_usage
+        exit 0
+        ;;
+    *) # reposet name / unknown option
+        reposets+=("$1")
+        ;;
+    esac
+    shift # past argument or value
+done
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=src/reposet.inc.sh
+source "${script_dir}/reposet.inc.sh"
+load_reposets_or_die "${reposets[@]}"
+
+for repo in "${_repos[@]}"; do
+    set_common_repo_variables "$repo"
+    n_current_repo++
+
+    [ "$quiet" == true ] || print_current_repo_and_progress
+    cd_to_repo_or_die 1
+    eval "$command"
+done

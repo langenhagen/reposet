@@ -1,0 +1,47 @@
+#!/bin/bash
+#
+# Lists the available reposet names.
+#
+# author: andreasl
+
+function show_usage {
+    script_name="${0##*/}"
+
+    msg="${script_name}\n"
+    msg="${msg}Lists all available reposets names, i.e. the filenames of the *.reposet files"
+    msg="${msg} without the suffix.\n"
+    msg="${msg}The nameless default reposet \".reposet\" is represented as \"(default)\", when"
+    msg="${msg} available.\n"
+    msg="${msg}\n"
+    msg="${msg}Usage:\n"
+    msg="${msg}  ${script_name}\n"
+    msg="${msg}\n"
+    msg="${msg}Example:\n"
+    msg="${msg}  ${script_name}                  # lists the reposet names\n"
+    msg="${msg}  ${script_name} -h               # prints the usage message\n"
+    msg="${msg}  ${script_name} --help           # prints the usage message\n"
+    printf "$msg"
+}
+
+while [ "$#" -gt '0' ] ; do
+    case "$1" in
+    -h|--help)
+        show_usage
+        exit 0
+        ;;
+    *) # unknown option
+        break
+        ;;
+    esac
+    shift # past argument or value
+done
+
+prefix_path="${HOME}/.reposets"
+if ! cd "$prefix_path" 2>/dev/null ; then
+    die "Could not cd into \"${prefix_path}\". Do you have a .reposets folder?" 1
+fi
+
+[ -f "${prefix_path}/.reposet" ] && printf '(default)\n'
+for file in *.reposet ; do
+    printf '%s\n' "${file%.reposet}"
+done
