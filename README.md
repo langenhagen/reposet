@@ -31,8 +31,8 @@ The project is structured as follows:
 ├── res                             Additional resources.
 ├── src                             Contains the sources.
 │   └── reposet                     The reposet command.
-├── setup.sh                        Links the reposet command to your environment.
-├── uninstall.sh                    Unlinks the reposet command from your environment.
+├── setup.sh                        Copies the reposet command into your environment.
+├── uninstall.sh                    Removes the reposet command from your environment.
 └── util                            Utility scripts.
 ```
 
