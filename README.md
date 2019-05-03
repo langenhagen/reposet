@@ -93,7 +93,7 @@ For instance, a `reposet` called "my" would be defined in a file located at
 
 The form of one element in the array `repos` should be:
 
-`"<local path>:<local default branch>:<remote-pull-repo>:<remote-pull-branch>:<remote-push-repo>:<remote-push-branch>"`
+`"<local-path>:<local-default-branch>:<remote-pull-repo>:<remote-pull-branch>:<remote-push-repo>:<remote-push-branch>"`
 
 For example, the following array would have valid form:
 ```bash
