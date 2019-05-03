@@ -60,13 +60,13 @@ This copies the scripts into the directory `/usr/local/bin`.
 
 
 ## Deinstallation
-To uninstall `reposet`, call:
+To uninstall, call:
 ```bash
 bash uninstall.sh
 ```
 This deletes the scripts from the directory `/usr/local/bin`.
 
-Then, you may delete the `git` repository.
+You may also delete the `git` repository.
 
 
 ## Usage
