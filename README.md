@@ -111,7 +111,8 @@ Well suited names are for example "all", "my" or "work".
 
 #### Exotic reposets
 Since a `*.reposet` file is simply a `bash` file that is sourced into the program, it can do all
-kinds of things. For example, it can create the array `repos` dynamically on demand. Get creative!
+kinds of things. For example, it can create the array `repos` dynamically on demand. For instance,
+a reposet "all.reposet" can aggregate the repos from other reposets. Get creative!
 
 ### Using the `reposet` Command
 TODO
@@ -171,6 +172,15 @@ It is written in `Python`.
 ## Coding
 TODO
 
+## Roadmap
+At the moment, I am happy with the features `reposet` provides.
+I will implement more command line arguments for the commands when the need arises.
+
+Individual repos could get an additional property that forbids pushing, or maybe repo definitions
+could accept empty remotes and remote branches for pushing in order to forbid pushing.
+
+I thought of a subcommand to add a given git repository to a given reposet from the command line.
+
 
 ## Contributing
 Work on your stuff locally, branch, commit and modify to your heart's content.
@@ -179,15 +189,13 @@ Happy coding!
 
 
 ## TODO
+- implement `reposet-sync`
 - finish help msg for `reposet`
 - make a `gif`
-- gittify
 - write `README.md`
-- mention helper function to support uniformity.
-- mention in the coding section that common variables exist and that they are updated indirectly
-  via certain helper functions like n_current_repo++ which are meant to be used in an idiomatic way
-- implement `reposet-sync`
+    - mention helper function to support uniformity.
+    - mention in the coding section that common variables exist and that they are updated indirectly
+      via certain helper functions like n_current_repo++ which are meant to be used in an idiomatic way
 - state, that you can combine several reposets but not the default reposet
     - and that it may be wise that th default reposet is a symlink to a named reposet
-- msgs:
-    - text correct?
+
