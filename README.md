@@ -157,7 +157,8 @@ It also claims support all kinds of version control systems, including `git` and
 `reposets` is more lightweight than `myrepos`.
 
 ### repo
-`repo` unifies `git` repositories and is meant to aid the `Android` development workflow.
+`repo` (https://source.android.com/setup/develop/repo) unifies `git` repositories and is meant to
+aid the `Android` development workflow.
 `repo` needs the `git` repositories to lie in the same directory tree.
 `repo` is written in `Python`.
 `reposets` is more lightweight than `repo` and more flexible, due to `reposets` being agnostic of
