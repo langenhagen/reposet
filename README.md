@@ -203,6 +203,6 @@ Happy coding!
     - mention helper function to support uniformity.
     - mention in the coding section that common variables exist and that they are updated indirectly
       via certain helper functions like n_current_repo++ which are meant to be used in an idiomatic way
-- state, that you can combine several reposets but not the default reposet
-    - and that it may be wise that th default reposet is a symlink to a named reposet
+    - state, that you can combine several reposets but not the default reposet
+        - and that it may be wise that th default reposet is a symlink to a named reposet
 
