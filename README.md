@@ -106,7 +106,8 @@ repos=(
 For a complete example, see the file `example.reposet`.
 
 ### Creating a Reposet
-An easy way to create a `reposet`, is to copy the `example.reposet` and modify the copy:
+An easy way to create a `reposet`, is to copy the `example.reposet` into the directory
+`$HOME/.reposets` and modify the copy:
 ```bash
 mkdir -p ~/.reposets
 cp example.reposet ~/.reposet/NAME.reposet  # adjust NAME
