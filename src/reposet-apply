@@ -20,7 +20,7 @@ function show_usage {
     msg="${msg}  ${script_name} my work            # lists all repositories in the reposet \"my\" and \"work\"\n"
     msg="${msg}  ${script_name} -- ls              # lists all repositories and calls \`ls\` on the path of all git repos\n"
     msg="${msg}  ${script_name} -q -- ls           # calls \`ls\` on the path of all git repos but does not list the git repos\n"
-    msg="${msg}  ${script_name} -q -- 'echo $PWD'  # prints the path of each git repo\n"
+    msg="${msg}  ${script_name} -q -- 'echo \$PWD'  # prints the path of each git repo\n"
     msg="${msg}  ${script_name} -h                 # prints the usage message\n"
     msg="${msg}  ${script_name} --help             # prints the usage message\n"
     msg="${msg}\n"
