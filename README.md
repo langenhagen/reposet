@@ -1,6 +1,9 @@
 # Reposet
 A flexible and simple command to deal with sets of `git` repositories.
 
+![](res/screen-example.gif)
+
+
 As opposed to working on many `git` repository one after another, `reposet` runs common operations
 on a given sets of repositories.
 `Reposet` provides convenience commands for the most common `git`-related tasks, like `push` and
@@ -172,6 +175,7 @@ It is written in `Python`.
 ## Coding
 TODO
 
+
 ## Roadmap
 At the moment, I am happy with the features `reposet` provides.
 I will implement more command line arguments for the commands when the need arises.
@@ -180,6 +184,10 @@ Individual repos could get an additional property that forbids pushing, or maybe
 could accept empty remotes and remote branches for pushing in order to forbid pushing.
 
 I thought of a subcommand to add a given git repository to a given reposet from the command line.
+
+Also, the output of reposet-list could get a more sophisticated way of formatting. At the moment, it
+is dependent on a maximume length of the fields it prints. When this length is exceeded, the tabular
+output is messed up. That could be improved.
 
 
 ## Contributing
