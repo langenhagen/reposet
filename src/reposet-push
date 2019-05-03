@@ -58,11 +58,11 @@ for repo in "${_repos[@]}"; do
         msg="Calling \`${rb}git push ${push_remote} ${local_branch}:${push_branch}${r}\`"
         msg="${msg} on the repo ${rb}${repo_path}${r} failed:"
         if [ "$code" == 128 ] ; then
-            msg="${msg} Do you have access rights?\n"
+            msg="${msg} Do you have access rights?"
             error_msgs="${error_msgs}${msg}"
             >&2 printf -- "${r}$msg${n}\n"
         else
-            msg="${msg} Unknown reason.\n"
+            msg="${msg} Unknown reason."
             die "$msg" 4 "cd \"${repo_path}\""
         fi
     fi
