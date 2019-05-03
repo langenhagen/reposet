@@ -119,7 +119,7 @@ function check_if_local_branch_exists_or_die {
 function checkout_local_branch_or_die {
     # Checks the local branch out or dies with the given exit code.
     if ! git checkout "$local_branch"; then
-        msg="Calling \`git checkout ${rb}${local_branch}${r}\` on ${rb}${repo_path}${r} failed."
+        msg="Calling \`${rb}git checkout ${local_branch}${r}\` on ${rb}${repo_path}${r} failed."
         die "$msg" "$1" "cd \"${repo_path}\""
     fi
 }

@@ -55,15 +55,15 @@ for repo in "${_repos[@]}"; do
     checkout_local_branch_or_die 3
 
     if ! git fetch --prune --tags "$pull_remote" "$pull_branch" ; then
-        msg="Calling \`git fetch --prune --tags ${pull_remote} ${pull_branch}\` on the repo"
-        msg="${msg} ${rb}${repo_path}${r} failed."
+        msg="Calling \`${rb}git fetch --prune --tags ${pull_remote} ${pull_branch}${r}\` on the"
+        msg="${msg} repo ${rb}${repo_path}${r} failed."
         die "$msg" 4 "cd \"${repo_path}\""
     fi
 
     git pull --rebase "$pull_remote" "$pull_branch"
     code="$?"
     if [ "$code" != 0 ] ; then
-        msg="Calling \`git pull --rebase ${rb}${pull_remote} ${pull_branch}${r}\` on the repo"
+        msg="Calling \`${rb}git pull --rebase ${pull_remote} ${pull_branch}${r}\` on the repo"
         msg="${msg} ${rb}${repo_path}${r} failed: "
         if [ "$code" == 1 ] ; then
             msg="${msg} Did not find this remote branch."

@@ -55,7 +55,7 @@ for repo in "${_repos[@]}"; do
     if [ "$code" == 1 ] ; then
         continue # 1 is "no new changes" on gerrit
     elif [ "$code" != 0 ] ; then
-        msg="Calling \`git push ${rb}${push_remote} ${local_branch}${r}:${rb}${push_branch}${r}\`"
+        msg="Calling \`${rb}git push ${push_remote} ${local_branch}:${push_branch}${r}\`"
         msg="${msg} on the repo ${rb}${repo_path}${r} failed:"
         if [ "$code" == 128 ] ; then
             msg="${msg} Do you have access rights?\n"
