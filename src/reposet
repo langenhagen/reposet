@@ -53,7 +53,7 @@ if [ "$#" -gt '0' ] ; then
         ;;
     esac
 else
-    bash "${script_dir}/reposet-status.sh"
+    bash "${script_dir}/reposet-status"
 fi
 
 exit "$?"
