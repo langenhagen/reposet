@@ -5,13 +5,12 @@ A flexible and simple command to deal with sets of `git` repositories.
 
 
 As opposed to working on many `git` repository one after another, `reposet` runs common operations
-on a given sets of repositories.
+on given sets of repositories.
 `Reposet` provides convenience commands for the most common `git`-related tasks, like `push` and
 `pull`.
-`Reposet` also allows to run any command with the repositories's directories set as the working
-directory.
-`Reposet` can handle several user-defined sets of repositories. It also supports a default set of
-repositories.
+`Reposet` also allows to run any command with the repositories' directories as the working
+directories.
+`Reposet` can handle several user-defined sets of repositories. It also supports a default set.
 `Reposet` is written in `bash` and does not require additional dependencies besides `git`.
 
 `Reposet` supports following commands:
@@ -25,7 +24,7 @@ repositories.
 
 After you set up your first reposet, call `reposet <command> [<reposet>...]`, to trigger a command.
 See below for further information.
-You can also call `reposet <command> --help`.
+To get help with the commands, you can call `reposet <command> --help`.
 
 The project is structured as follows:
 ```
@@ -78,22 +77,26 @@ Calling the `reposet` command has the general form: `reposet <subcommand> [<repo
 
 For example, calling `reposet pull`, pulls changes from the default remote branches to the default
 local branches on all repositories in the default set of repositories.
-Calling `reposet pull my` pulls from the remote branches on the repos defined in a file
-`$HOME/.reposets/my.reposet` (see below under **Reposet Files**).
-Calling `reposet pull my work` pulls from repos defined in the files `my.reposet` and
+Calling `reposet pull my` pulls from the remote branches on the repos listed in a file
+`$HOME/.reposets/my.reposet` (see below in section **Reposet Files**).
+Calling `reposet pull my work` pulls from repos listed in the files `my.reposet` and
 `work.reposet`.
 
 ### Reposet Files
-A `reposet` is a `bash` file with the extension `*.reposet` that defines an array named `repos`
-whose elements describe a locally checked out `git` repository.
-A `reposet` file must be located in the directory `$HOME/.reposets`.
-The name of a `reposet` is equal of the name of the file, without the suffix `.reposet`.
-For instance, a `reposet` called "my" would be defined in a file `my.reposet` located in
-`$HOME/.reposets`.
-You can use the special default reposet `.reposet` that does not have a name and will be used when
-no reposets are specified when calling a `reposet` command.
+A reposet is a `bash` file with the extension `*.reposet` that defines an array whose elements
+describe an existing `git` repository.
+A `reposet` subcommand may source a `*.reposet` file in order to load repository information.
+A `*.reposet` file must be located in the directory `$HOME/.reposets`.
+The name of a reposet is equal of the name of the file, without the suffix `.reposet`.
+For instance, a reposet called "my" would be defined in the file `$HOME/.reposets/my.reposet`.
+The special default reposet `.reposet` does not have a name and may be used when calling a `reposet`
+subcommand with no reposets specified.
 
-The form of one element in the array `repos` should be:
+The array inside the `*.reposet`-files that defines which repositories belong to the reposet has to
+have the name `repos`.
+One element in the array `repos` specifies 6 important attributes of one git repository, each
+attribute separated by a colon `:`.
+The form of one element that describes a git repository in the array `repos` is:
 
 `"<local-path>:<local-default-branch>:<remote-pull-repo>:<remote-pull-branch>:<remote-push-repo>:<remote-push-branch>"`
 
@@ -106,85 +109,102 @@ repos=(
     "${HOME}/dotfiles:master:origin:master:origin:master"
 )
 ```
-For a complete example, see the file `res/example.reposet`.
+For a complete example, review the file `res/example.reposet`.
 
-If a `reposet` contains the same repo specification several times, a call to `reposet` will execute
+If a reposet contains the same repo specification several times, a call to `reposet` will execute
 the specified action on the repository repeatedly. The same holds when two or more reposets with
-overlapping repository specifications are given to a `reposet` command. Strictly speaking,
-`reposets` rather define lists of repos than sets.
+overlapping repository specifications are given to a `reposet` command. Strictly speaking, reposets
+rather define lists of repos than sets.
 
 ### Creating a Reposet
-An easy way to create a `reposet`, is to copy the file `res/example.reposet` into the directory
+An easy way to create a reposet, is to copy the file `res/example.reposet` into the directory
 `$HOME/.reposets` and modify the copy:
 ```bash
 mkdir -p ~/.reposets
 cp res/example.reposet ~/.reposet/NAME.reposet  # adjust NAME
 vim ~/.reposets/NAME.reposet  # adjust NAME
 ```
-
-Preferrably, `reposets` have simple and short names and start with a letter or a number.
-`Reposets` whose names start with a minus (`-`) may be mistaken with command line options.
+Preferrably, reposets have simple and short names and start with a letter or a number.
 Well suited names are for example "all", "my" or "work".
+Naming the new reposet file `.reposet` creates the default reposet. This reposet will be used when
+calls to the command `reposet` do not specify which reposets are to be used.
 
 #### Exotic reposets
 Since a `*.reposet` file is simply a `bash` file that is sourced into the program, it can do all
-kinds of things. For example, it can create the array `repos` dynamically on demand. For instance,
-a reposet "all.reposet" can aggregate the repos from other reposets. Get creative!
+kinds of things. For example, a reposet file `all.reposet` may aggregate the repos from other
+reposets dynamically. Get creative!
 
 ### Using the `reposet` Command
-TODO
+Calling the `reposet` command has the general form: `reposet <subcommand> [<reposet>...]`.
 
+The available commands are:
+- `reposet apply`
+- `reposet list-sets`
+- `reposet list`
+- `reposet pull`
+- `reposet push`
+- `reposet status`
+- `reposet sync`
+
+Calling `reposet <subcommand> --help` provides a usage description for each subcommand.
+
+`reposet` commands take an arbitrary number of reposets (see above in section **Reposet Files**) as
+arguments.
+If no reposet is given as an argument, the default reposet is used.
+If several reposets are given, their items are chained.
+
+The default reposet can not be chained with other reposets.
+To circumvent this limitation, create a named reposet that you want to use as default and source
+its `*.reposet` file in the default reposet file `.reposet`.
+For example, the file `.reposet` could source a named reposet "default":
+```bash
+source ~/.reposets/default.reposet
 ```
-    reposet apply
-    reposet list-sets
-    reposet sets
-    reposet list
-    reposet ls
-    reposet pull
-    reposet down
-    reposet push
-    reposet up
-    reposet status
-reposet sync
-```
+
+Some subcommands have synonyms:
+- `reposet down` is synonym for `reposet pull`
+- `reposet ls` is synonym for `reposet list`
+- `reposet sets` is synonym for `reposet list-sets`
+- `reposet up` is synonym for `reposet push`
 
 
 ## Similar Software
 `reposet` provides a command that is convenient and simple without impairing flexibility.
-It comes with minimal dependencies and requires no learning. `Reposet` is agnostic to the location
-the `git` repositories it acts on.
+It comes with minimal dependencies and requires little learning.
+`Reposet` is agnostic to the location the `git` repositories it acts on.
 
-There are plenty tools that do the similar work, albeit with different approaches.
+There are plenty tools that do a similar job, albeit with different slightly different.
 
 ### gita
 `gita` (https://github.com/nosarthur/gita) can delegate `git` commands/aliases to one set of `git`
-repos and show the the `git` status.
+repos and show the `git` status.
 `gita` can only handle one set of repositories.
 `gita` is written in `Python`.
-`reposets` is more flexible due to its capability to handle several sets of repositories.
-Furthermore, `reposets` is not limited to the execution of `git` commands on the repositories.
+`reposet` is more flexible due to its capability to handle several sets of repositories.
+Also, `reposet` is not limited to the execution of `git` commands on the repositories.
 
 ### myrepos
 `myrepos` (https://myrepos.branchable.com/) claims to manage your version control repositories.
-It also claims support all kinds of version control systems, including `git` and `Darks`.
+It also claims support all kinds of version control systems, including `git` and lesser known ones
+like `Darks`.
 `myrepo` is highly configurable and can also automate certain tasks.
-`reposets` is more lightweight than `myrepos`.
+`reposet` is rather lightweight compared to `myrepos`.
 
 ### repo
 `repo` (https://source.android.com/setup/develop/repo) unifies `git` repositories and is meant to
 aid the `Android` development workflow.
 `repo` needs the `git` repositories to lie in the same directory tree.
 `repo` is written in `Python`.
-`reposets` is more lightweight than `repo` and more flexible, due to `reposets` being agnostic of
-the directories the repositories reside in.
+`reposet` is more lightweight than `repo` and more flexible, due to `reposet` being agnostic to the
+paths where the repositories reside in.
 
 ### vcstool
 `vcstool` (https://github.com/dirk-thomas/vcstool) aims to make work with several repositories
 easier.
-It can handle repos of the version control the systems `git`, `Mercurial`, `Subversion` and
+It can handle repositories of the version control the systems `git`, `Mercurial`, `Subversion` and
 `Bazaar`.
 It is written in `Python`.
-`reposets` is more lightweight than `myrepos`.
+`reposet` is rather lightweight compared to `myrepos`.
 
 
 ## Coding
@@ -192,27 +212,30 @@ TODO
 
 
 ## Roadmap
-At the moment, I am happy with the features `reposet` provides.
-I will implement more command line arguments for the commands when the need arises.
+At the moment, I am content with the features that `reposet` provides.
+I intend to add more command line arguments for the commands when the need arises.
+I already thought of some additions and improvements:
 
 Individual repo definitions could get an additional property that disables pushing (and possibly
 pulling, respectively). Another idea is, that repo definitions could accept empty remotes and remote
 branches for pushing in order to disable pushing.
 
-I thought of a subcommand `reposet-add [<reposet>] <path> [...]` to add a given git repository to a
-given reposet from the command line.
+Create a new subcommand `reposet-add [<reposet>] <path> [...]` to add a given git repository to a
+given reposet via the command line.
 
-The output of `reposet-list` could get a more sophisticated way of formatting. At the moment, it is
+The output of `reposet-list` could get a more sophisticated formatting. At the moment, it is
 dependent on a maximum length of the fields it prints. When this length is exceeded, the tabular
 output is messed up. That could be improved.
 
-Also, I thought of optionally adding or overriding paths to the `*.reposet` files as command line
-paramaters in order to provide the base to share `*.reposet` files.
+Implement command line parameters to optionally add or override paths to the `*.reposet` files/paths
+in order to provide flexibility and enable sharing of `*.reposet` files.
+
+Add `bash`-completion, `fish`-completion, and completion for other shells.
 
 
 ## Contributing
 Work on your stuff locally, branch, commit and modify to your heart's content.
-If there is anything you can correct, extend or improve, please do so!
+If there is anything you can extend, fix or improve, please do so!
 Happy coding!
 
 
@@ -221,7 +244,8 @@ Happy coding!
 - write `README.md`
     - mention helper function to support uniformity.
     - mention in the coding section that common variables exist and that they are updated indirectly
-      via certain helper functions like n_current_repo++ which are meant to be used in an idiomatic way
+      via certain helper functions like `n_current_repo++` which are meant to be used in an
+      idiomatic way
     - state, that you can combine several reposets but not the default reposet
         - and that it may be wise that th default reposet is a symlink to a named reposet
 

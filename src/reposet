@@ -39,7 +39,7 @@ function show_usage {
 }
 
 function show_version {
-    printf 'reposet version %s\n' '0.8.0'
+    printf 'reposet version %s\n' '0.8.1'
 }
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
