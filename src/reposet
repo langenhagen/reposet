@@ -6,12 +6,40 @@
 # author: andreasl
 
 function show_usage {
-    #TODO
-    true
+    script_name="${0##*/}"
+
+    msg="${script_name}\n"
+    msg="${msg}A flexible and simple command to deal with sets of git repositories.\n\n"
+    msg="${msg}Reposet provides a handful of subcommands to run common or specified actions on sets"
+    msg="${msg} of git repositories.\n"
+    msg="${msg}\n"
+    msg="${msg}Commands are:\n"
+    msg="${msg}\n"
+    msg="${msg}  ${script_name} apply      - execute a given bash command or series of commands\n"
+    msg="${msg}  ${script_name} list       - list contents of given reposets\n"
+    msg="${msg}  ${script_name} list-sets  - list reposets\n"
+    msg="${msg}  ${script_name} pull       - pull from a remote\n"
+    msg="${msg}  ${script_name} push       - push to a remote\n"
+    msg="${msg}  ${script_name} status     - show status of repositories\n"
+    msg="${msg}  ${script_name} sync       - combined pull and push\n"
+    msg="${msg}\n"
+    msg="${msg}Usage:\n"
+    msg="${msg}  ${script_name} [<subcommand>] [...]\n"
+    msg="${msg}\n"
+    msg="${msg}Examples:\n"
+    msg="${msg}  ${script_name}                       # print the status of the repositories in the default reposet\n"
+    msg="${msg}  ${script_name} pull work             # call git pull --rebase on all repos in the reposet \"work\"\n"
+    msg="${msg}  ${script_name} push my work          # call git push on all repos in the reposets \"my\" and \"work\"\n"
+    msg="${msg}  ${script_name} apply -q my -- ls -al # call \`ls -al\` on each repository in the reposet \"my\"\n"
+    msg="${msg}  ${script_name} -h                    # print the usage message\n"
+    msg="${msg}  ${script_name} --help                # print the usage message\n"
+    msg="${msg}\n"
+    msg="${msg}For more information visit http://github.com/langenhagen/reposet.\n"
+    printf "$msg"
 }
 
 function show_version {
-    printf 'Reposet version %s\n' '0.1.0'
+    printf 'reposet version %s\n' '0.8.0'
 }
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
