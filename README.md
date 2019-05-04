@@ -31,9 +31,9 @@ You can also call `reposet <command> --help`.
 The project is structured as follows:
 ```
 .
-├── example.reposet                 Example reposet definition for reference.
 ├── README.md                       You are here now.
 ├── res                             Additional resources.
+│   └── example.reposet             Example reposet definition for reference.
 ├── src                             Contains the sources.
 │   └── reposet                     The reposet command.
 ├── setup.sh                        Copies the reposet command into your environment.
@@ -104,14 +104,14 @@ repos=(
     "${HOME}/dotfiles:master:origin:master:origin:master"
 )
 ```
-For a complete example, see the file `example.reposet`.
+For a complete example, see the file `res/example.reposet`.
 
 ### Creating a Reposet
-An easy way to create a `reposet`, is to copy the `example.reposet` into the directory
+An easy way to create a `reposet`, is to copy the file `res/example.reposet` into the directory
 `$HOME/.reposets` and modify the copy:
 ```bash
 mkdir -p ~/.reposets
-cp example.reposet ~/.reposet/NAME.reposet  # adjust NAME
+cp res/example.reposet ~/.reposet/NAME.reposet  # adjust NAME
 vim ~/.reposets/NAME.reposet  # adjust NAME
 ```
 
@@ -206,7 +206,6 @@ Happy coding!
 
 ## TODO
 - implement `reposet-sync`
-- finish help msg for `reposet`
 - write `README.md`
     - mention helper function to support uniformity.
     - mention in the coding section that common variables exist and that they are updated indirectly
