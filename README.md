@@ -23,8 +23,7 @@ repositories.
 - `list-sets`
 - `apply` (any given `bash` command or series of commands)
 
-After you set up your first reposet, just call `reposet <command> [<reposet>...]`, to trigger a
-command.
+After you set up your first reposet, call `reposet <command> [<reposet>...]`, to trigger a command.
 See below for further information.
 You can also call `reposet <command> --help`.
 
@@ -43,7 +42,7 @@ The project is structured as follows:
 
 
 ## Prerequisites
-`reposet` needs no prerequisites except `git`. It should run on all `Unix`-like systems.
+`reposet` needs no prerequisites except `bash` and `git`. It should run on all `Unix`-like systems.
 
 
 ## Installation
@@ -57,6 +56,11 @@ Then, execute the script `setup.sh`:
 bash setup.sh
 ```
 This copies the scripts into the directory `/usr/local/bin`.
+
+To verify, run:
+```bash
+reposet --version
+```
 
 
 ## Deinstallation
@@ -75,21 +79,19 @@ Calling the `reposet` command has the general form: `reposet <subcommand> [<repo
 For example, calling `reposet pull`, pulls changes from the default remote branches to the default
 local branches on all repositories in the default set of repositories.
 Calling `reposet pull my` pulls from the remote branches on the repos defined in a file
-`my.reposet`.
+`$HOME/.reposets/my.reposet` (see below under **Reposet Files**).
 Calling `reposet pull my work` pulls from repos defined in the files `my.reposet` and
 `work.reposet`.
-A `reposet` may contain the same repo specification several times. In this case, a call to `reposet`
-will execute the specified action on the repository repeatedly. The same holds when two or more sets
-are given to a `reposet` command and repository specifications repeat. Strictly speaking, `reposets`
-rather define lists of repos instead of sets.
 
 ### Reposet Files
-A `reposet` is a `bash` file with the extension `*.reposet` which defines an array named `repos`
-whose elements describe a locally available `git` repository.
+A `reposet` is a `bash` file with the extension `*.reposet` that defines an array named `repos`
+whose elements describe a locally checked out `git` repository.
 A `reposet` file must be located in the directory `$HOME/.reposets`.
 The name of a `reposet` is equal of the name of the file, without the suffix `.reposet`.
-For instance, a `reposet` called "my" would be defined in a file located at
-`$HOME/.reposets/my.reposet`.
+For instance, a `reposet` called "my" would be defined in a file `my.reposet` located in
+`$HOME/.reposets`.
+You can use the special default reposet `.reposet` that does not have a name and will be used when
+no reposets are specified when calling a `reposet` command.
 
 The form of one element in the array `repos` should be:
 
@@ -105,6 +107,11 @@ repos=(
 )
 ```
 For a complete example, see the file `res/example.reposet`.
+
+If a `reposet` contains the same repo specification several times, a call to `reposet` will execute
+the specified action on the repository repeatedly. The same holds when two or more reposets with
+overlapping repository specifications are given to a `reposet` command. Strictly speaking,
+`reposets` rather define lists of repos than sets.
 
 ### Creating a Reposet
 An easy way to create a `reposet`, is to copy the file `res/example.reposet` into the directory
@@ -188,14 +195,19 @@ TODO
 At the moment, I am happy with the features `reposet` provides.
 I will implement more command line arguments for the commands when the need arises.
 
-Individual repos could get an additional property that forbids pushing, or maybe repo definitions
-could accept empty remotes and remote branches for pushing in order to forbid pushing.
+Individual repo definitions could get an additional property that disables pushing (and possibly
+pulling, respectively). Another idea is, that repo definitions could accept empty remotes and remote
+branches for pushing in order to disable pushing.
 
-I thought of a subcommand to add a given git repository to a given reposet from the command line.
+I thought of a subcommand `reposet-add [<reposet>] <path> [...]` to add a given git repository to a
+given reposet from the command line.
 
-Also, the output of reposet-list could get a more sophisticated way of formatting. At the moment, it
-is dependent on a maximume length of the fields it prints. When this length is exceeded, the tabular
+The output of `reposet-list` could get a more sophisticated way of formatting. At the moment, it is
+dependent on a maximum length of the fields it prints. When this length is exceeded, the tabular
 output is messed up. That could be improved.
+
+Also, I thought of optionally adding or overriding paths to the `*.reposet` files as command line
+paramaters in order to provide the base to share `*.reposet` files.
 
 
 ## Contributing
