@@ -46,14 +46,14 @@ function sanity_check_reposet_or_die {
     fi
 
     # check each reposet entry has correct size
-    wrong_lines="$(printf '%s\n' "${repos[@]}" | grep -Ensv '^([^:]+:){5}[^:]+$')"
+    wrong_lines="$(printf '%s\n' "${repos[@]}" | grep -Ensv '^([^:]+:){2}([^:]*:){3}[^:]*$')"
     if [ -n "$wrong_lines" ] ; then
         msg="Errors in ${BASH_SOURCE[0]} sourced by ${0}: Reposet array \"\$repos\" in file:"
         msg="${msg} \"${rb}${reposet_file}${r}\" contains broken lines:\n"
         msg="${msg}${wrong_lines}\n\n"
         msg="${msg}A repository definition must contain 6 fields, each delimited by ':' in the"
         msg="${msg} form:\n"
-        msg="${msg}<path>,<local branch>:<remote pull repo>:<remote pull branch>:<remote push repo>:<remote push branch>\n"
+        msg="${msg}<path>:<local branch>:[<remote pull repo>]:[<remote pull branch>]:[<remote push repo>]:[<remote push branch>]\n"
         die "$msg" 13
     fi
 }
@@ -172,6 +172,8 @@ function print_current_repo_and_progress {
 function define_color_codes {
     r='\e[0;31m'
     g='\e[0;32m'
+    blue='\e[0;34m'
+    bblue='\e[1;34m'
     b='\e[1m'
     rb='\e[1;31m'
     gb='\e[1;32m'

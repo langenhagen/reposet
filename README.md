@@ -98,14 +98,20 @@ One element in the array `repos` specifies 6 important attributes of one git rep
 attribute separated by a colon `:`.
 The form of one element that describes a git repository in the array `repos` is:
 
-`"<local-path>:<local-default-branch>:<remote-pull-repo>:<remote-pull-branch>:<remote-push-repo>:<remote-push-branch>"`
+`"<local-path>:<local-default-branch>:[<remote-pull-repo>]:[<remote-pull-branch>]:[<remote-push-repo>]:[<remote-push-branch>]"`
 
-For example, the following array would have valid form:
+Specification of remotes and remote branches is optional. If they are missing, push and pull
+operations are disabled for the respective repository. Even in this case, the colon-delimeters `:`
+are required.
+
+As an example, the following array would have valid form:
 ```bash
 repos=(
     "${HOME}/my projects/project1:master:origin:master:origin:master"
     "${HOME}/my projects/project1:dev::origin:staging:origin:staging"
     "${HOME}/my projects/my-gerrit-project:master:origin:master:origin:refs/for/master"
+    "${HOME}/my projects/pull-only-project:master:origin:master::"
+    "${HOME}/my projects/local-only-project:master::::"
     "${HOME}/dotfiles:master:origin:master:origin:master"
 )
 ```
@@ -215,10 +221,6 @@ TODO
 At the moment, I am content with the features that `reposet` provides.
 I intend to add more command line arguments for the commands when the need arises.
 I already thought of some additions and improvements:
-
-Individual repo definitions could get an additional property that disables pushing (and possibly
-pulling, respectively). Another idea is, that repo definitions could accept empty remotes and remote
-branches for pushing in order to disable pushing.
 
 Create a new subcommand `reposet-add [<reposet>] <path> [...]` to add a given git repository to a
 given reposet via the command line.

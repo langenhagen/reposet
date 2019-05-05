@@ -50,6 +50,11 @@ for repo in "${_repos[@]}"; do
     print_current_repo_and_progress
     check_if_local_branch_exists_or_die 2
 
+    if [ -z "$push_remote" ] || [ -z "$push_branch" ] ; then
+        printf -- "${blue} Repo ${bblue}$repo_path${blue} is not set up for pushing.${n}\n"
+        continue
+    fi
+
     git push "$push_remote" "$local_branch":"$push_branch"
     code="$?"
     if [ "$code" == 1 ] ; then

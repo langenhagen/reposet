@@ -54,6 +54,11 @@ for repo in "${_repos[@]}"; do
     check_if_local_branch_exists_or_die 2
     checkout_local_branch_or_die 3
 
+    if [ -z "$pull_remote" ] || [ -z "$pull_branch" ] ; then
+        printf -- "${blue} Repo ${bblue}$repo_path${blue} is not set up for pulling.${n}\n"
+        continue
+    fi
+
     if ! git fetch --prune --tags "$pull_remote" "$pull_branch" ; then
         msg="Calling \`${rb}git fetch --prune --tags ${pull_remote} ${pull_branch}${r}\` on the"
         msg="${msg} repo ${rb}${repo_path}${r} failed."

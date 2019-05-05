@@ -15,5 +15,7 @@ repos=(
     "${HOME}/my projects/project1:master:origin:master:origin:master"
     "${HOME}/my projects/project1:dev::origin:staging:origin:staging"
     "${HOME}/my projects/my-gerrit-project:master:origin:master:origin:refs/for/master"
+    "${HOME}/my projects/pull-only-project:master:origin:master::"
+    "${HOME}/my projects/local-only-project:master::::"
     "${HOME}/dotfiles:master:origin:master:origin:master"
 )
