@@ -37,6 +37,23 @@ while [ "$#" -gt '0' ] ; do
 done
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=src/reposet.inc.sh
+source "${script_dir}/reposet.inc.sh"
+load_reposets_or_die "$@"
 
-bash "${script_dir}/reposet-apply" -q "$@" -- \
-    'printf "%s" "$PWD"; printf "%0.s~" $(seq ${#PWD} 45); git status -bsu'
+max_path_length=0
+for repo in "${_repos[@]}"; do
+    set_common_repo_variables "$repo"
+    n_current_repo++
+    [ ${#repo_path} -gt "$max_path_length" ] && max_path_length=${#repo_path}
+done
+
+n_current_repo=0
+for repo in "${_repos[@]}"; do
+    set_common_repo_variables "$repo"
+    n_current_repo++
+    cd_to_repo_or_die 1
+
+    printf "%s" "$PWD"; printf "%0.s~" $(seq ${#PWD} "${max_path_length}");
+    git status --branch --short --untracked-files
+done
