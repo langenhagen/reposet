@@ -149,7 +149,7 @@ The available commands are:
 - `reposet list` - list all git repositories in the given reposets
 - `reposet pull` - call `git pull --rebase` on the repos
 - `reposet push` - call `git push` on the repos
-- `reposet status` - call `git status --branch --short --untracked-files` on the repos
+- `reposet status` - call `git status` on the repos
 - `reposet sync` - call `git pull --rebase` and then `git push` on the repos
 
 Calling `reposet <subcommand> --help` provides a usage description for each subcommand.
