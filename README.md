@@ -222,12 +222,11 @@ At the moment, I am content with the features that `reposet` provides.
 I intend to add more command line arguments for the commands when the need arises.
 I already thought of some additions and improvements:
 
-Create a new subcommand `reposet-add [<reposet>] <path> [...]` to add a given git repository to a
-given reposet via the command line.
+Create a new subcommand `reposet-add [<reposet>] [<path>...] [...]` to add a given git repository to
+a given reposet via the command line.
 
-The output of `reposet-list` could get a more sophisticated formatting. At the moment, it is
-dependent on a maximum length of the fields it prints. When this length is exceeded, the tabular
-output is messed up. That could be improved.
+Create a command `reposet init [<path>...]` that finds git-repositories under the pwd or under the
+given paths and attempts to create a reposet on the given checked out branches and tracked branches.
 
 Implement command line parameters to optionally add or override paths to the `*.reposet` files/paths
 in order to provide flexibility and enable sharing of `*.reposet` files.
