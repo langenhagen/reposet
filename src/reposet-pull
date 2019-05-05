@@ -55,7 +55,7 @@ for repo in "${_repos[@]}"; do
     checkout_local_branch_or_die 3
 
     if [ -z "$pull_remote" ] || [ -z "$pull_branch" ] ; then
-        printf -- "${blue} Repo ${bblue}$repo_path${blue} is not set up for pulling.${n}\n"
+        printf -- "${b}Repo ${bb}$repo_path${b} is not set up for pulling.${n}\n"
         continue
     fi
 

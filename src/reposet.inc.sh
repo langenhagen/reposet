@@ -131,7 +131,7 @@ function print_all_repos_status_or_die {
     n_current_repo=0
     for repo in "${_repos[@]}"; do
         set_common_repo_variables "$repo"
-        printf "${b}${repo_path}${n}\n"
+        printf "${bold}${repo_path}${n}\n"
         cd_to_repo_or_die "$1"
         git status --short --untracked-files
     done
@@ -163,7 +163,7 @@ function remote_push_branch {
 }
 
 function print_current_repo_and_progress {
-    printf "${b}(${n_current_repo}/${n_repos}) ${repo_path}${n}...\n"
+    printf "${bold}(${n_current_repo}/${n_repos}) ${repo_path}${n}...\n"
 }
 
 # color codes
@@ -172,11 +172,11 @@ function print_current_repo_and_progress {
 function define_color_codes {
     r='\e[0;31m'
     g='\e[0;32m'
-    blue='\e[0;34m'
-    bblue='\e[1;34m'
-    b='\e[1m'
+    b='\e[0;34m'
+    bold='\e[1m'
     rb='\e[1;31m'
     gb='\e[1;32m'
+    bb='\e[1;34m'
     n='\e[0m'
 }
 define_color_codes
