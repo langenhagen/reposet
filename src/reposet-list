@@ -100,13 +100,32 @@ source "${script_dir}/reposet.inc.sh"
 load_reposets_or_die "${reposets[@]}"
 
 if [ "$show_raw_output" != true ] ; then
-    [ "$show_numbers" = true ] && printf '%-3s ' "NR";
-    printf '%-50s' "REPO_PATH"
-    [ "$show_local_branch" = true ] && printf '%-15s ' "LOCAL_BRANCH"
-    [ "$show_pull_remote" = true ] && printf '%-15s ' "PULL_REMOTE"
-    [ "$show_pull_branch" = true ] && printf '%-20s ' "REMOTE_PULL_BRANCH"
-    [ "$show_push_remote" = true ] && printf '%-15s ' "PUSH_REMOTE"
-    [ "$show_push_branch" = true ] && printf '%-20s ' "REMOTE_PUSH_BRANCH"
+
+    col_len_path=10
+    col_len_local_branch=13
+    col_len_push_remote=12
+    col_len_push_branch=10
+    col_len_pull_remote=12
+    col_len_pull_branch=19
+    for repo in "${_repos[@]}"; do
+        set_common_repo_variables "$repo"
+        n_current_repo++
+
+        [ ${#repo_path} -gt $col_len_path ] && col_len_path=${#repo_path}
+        [ ${#local_branch} -gt $col_len_local_branch ] && col_len_local_branch=${#local_branch}
+        [ ${#pull_remote} -gt $col_len_pull_remote ] && col_len_pull_remote=${#pull_remote}
+        [ ${#pull_branch} -gt $col_len_pull_branch ] && col_len_pull_branch=${#pull_branch}
+        [ ${#push_remote} -gt $col_len_push_remote ] && col_len_push_remote=${#push_remote}
+        [ ${#push_branch} -gt $col_len_push_branch ] && col_len_push_branch=${#push_branch}
+    done
+
+    [ "$show_numbers" = true ] && printf '%-3s ' 'NR';
+    printf "%-${col_len_path}s  " 'REPO_PATH'
+    [ "$show_local_branch" = true ] && printf "%-${col_len_local_branch}s  " 'LOCAL_BRANCH'
+    [ "$show_pull_remote" = true ] && printf "%-${col_len_pull_remote}s  " 'PULL_REMOTE'
+    [ "$show_pull_branch" = true ] && printf "%-${col_len_pull_branch}s  " 'REMOTE_PULL_BRANCH'
+    [ "$show_push_remote" = true ] && printf "%-${col_len_push_remote}s  " 'PUSH_REMOTE'
+    [ "$show_push_branch" = true ] && printf "%-${col_len_push_branch}s  " 'REMOTE_PUSH_BRANCH'
     printf '\n'
 fi
 
@@ -119,12 +138,12 @@ for repo in "${_repos[@]}"; do
     if [ "$show_raw_output" = true ] ; then
             printf '%s\n' "$repo"
     else
-        printf '%-50s' "$repo_path"
-        [ "$show_local_branch" = true ] && printf '%-15s ' "$local_branch"
-        [ "$show_pull_remote" = true ] && printf '%-15s ' "$pull_remote"
-        [ "$show_pull_branch" = true ] && printf '%-20s ' "$pull_branch"
-        [ "$show_push_remote" = true ] && printf '%-15s ' "$push_remote"
-        [ "$show_push_branch" = true ] && printf '%-20s ' "$push_branch"
+        printf "%-${col_len_path}s  " "$repo_path"
+        [ "$show_local_branch" = true ] && printf "%-${col_len_local_branch}s  " "$local_branch"
+        [ "$show_pull_remote" = true ] && printf "%-${col_len_pull_remote}s  " "$pull_remote"
+        [ "$show_pull_branch" = true ] && printf "%-${col_len_pull_branch}s  " "$pull_branch"
+        [ "$show_push_remote" = true ] && printf "%-${col_len_push_remote}s  " "$push_remote"
+        [ "$show_push_branch" = true ] && printf "%-${col_len_push_branch}s  " "$push_branch"
         printf '\n'
     fi
 done
