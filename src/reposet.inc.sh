@@ -4,103 +4,6 @@
 #
 # author: andreasl
 
-function load_reposets_or_die {
-    # Loads the given reposets,
-    # performs sanity checks
-    # and adds the found repos into the array _repos.
-    # If no reposet is given, loads the default reposet.
-    if [ "$#" -ne 0 ] ; then
-        for reposet in "$@" ; do
-            load_reposet_or_die "$reposet"
-        done
-    else
-        load_reposet_or_die
-    fi
-}
-
-function load_reposet_or_die {
-    # Loads a reposet with the given name,
-    # performs sanity checks
-    # and appends it to tbe array _repos.
-    # If no reposet is given, loads the default reposet.
-    reposet_file="${HOME}/.reposets/${1}.reposet"
-    if [ ! -f "$reposet_file" ] ; then
-        die "Expected existing reposet file at ${rb}${reposet_file}${r} but found none." 11
-    fi
-
-    # shellcheck disable=SC1090
-    source "$reposet_file"
-    sanity_check_reposet_or_die
-    _repos+=(${repos[@]})
-    n_repos="${#_repos[@]}"
-}
-
-function sanity_check_reposet_or_die {
-    # Checks if the reposet array 'repos' has the correct form.
-
-    # check reposet is not empty
-    if [ ${#repos[@]} -eq 0 ] ; then
-        msg="Error in ${BASH_SOURCE[0]} sourced by ${0}: Reposet array \"\$repos\" in file:"
-        msg="${msg} \"${rb}${reposet_file}${r}\" seems to be empty."
-        die "$msg" 12
-    fi
-
-    # check each reposet entry has correct size
-    wrong_lines="$(printf '%s\n' "${repos[@]}" | grep -Ensv '^([^:]+:){2}([^:]*:){3}[^:]*$')"
-    if [ -n "$wrong_lines" ] ; then
-        msg="Errors in ${BASH_SOURCE[0]} sourced by ${0}: Reposet array \"\$repos\" in file:"
-        msg="${msg} \"${rb}${reposet_file}${r}\" contains broken lines:\n"
-        msg="${msg}${wrong_lines}\n\n"
-        msg="${msg}A repository definition must contain 6 fields, each delimited by ':' in the"
-        msg="${msg} form:\n"
-        msg="${msg}<path>:<local branch>:[<remote pull repo>]:[<remote pull branch>]:[<remote push repo>]:[<remote push branch>]\n"
-        die "$msg" 13
-    fi
-}
-
-function set_common_repo_variables {
-    # Sets common variables that relate to the given repo line.
-    n_repos="${#_repos[@]}"
-    repo_path="$(local_path "$1")"
-    local_branch="$(local_branch "$1")"
-    pull_remote="$(remote_pull_repo "$1")"
-    pull_branch="$(remote_pull_branch "$1")"
-    push_remote="$(remote_push_repo "$1")"
-    push_branch="$(remote_push_branch "$1")"
-}
-
-function print_common_repo_variables {
-    printf 'n_repos=%s\n' "$n_repos"
-    printf 'n_current_repo=%s\n' "$n_current_repo"
-    printf 'repo_path=%s\n' "$repo_path"
-    printf 'local_branch=%s\n' "$local_branch"
-    printf 'pull_remote=%s\n' "$pull_remote"
-    printf 'pull_branch=%s\n' "$pull_branch"
-    printf 'push_remote=%s\n' "$push_remote"
-    printf 'push_branch=%s\n' "$push_branch"
-}
-
-n_current_repo=0  # the current repository index
-function n_current_repo++ {
-    # Adds 1 to the common variable n_current_repo.
-    ((n_current_repo += 1))
-}
-
-function die {
-    # Prints a given error message,
-    # optionally writes a given command to the clipboard,
-    # and exits with a given code.
-    >&2 printf -- "${r}Error: ${1}${n}\n"
-
-    if [ -n "$3" ] && command -v xclip >/dev/null && [ -n "$DISPLAY" ] ; then
-        printf '%s' "$3" | xclip -i -f -selection primary | xclip -i -selection clipboard
-        if [ $((PIPESTATUS[1]+PIPESTATUS[2])) -eq 0 ] ; then
-            printf "Command '${3}' written to system clipboard\n"
-        fi
-    fi
-    exit "$2"
-}
-
 function cd_to_repo_or_die {
     if ! cd "$repo_path"; then
         die "Path ${rb}${repo_path}${r} does not exist." "$1"
@@ -124,17 +27,19 @@ function checkout_local_branch_or_die {
     fi
 }
 
-function print_all_repos_status_or_die {
-    # Changes directory to each repo, or dies with the given exit code,
-    # and calls git status.
-    printf "Checking status for all repos:\n"
-    n_current_repo=0
-    for repo in "${_repos[@]}"; do
-        set_common_repo_variables "$repo"
-        printf "${bold}${repo_path}${n}\n"
-        cd_to_repo_or_die "$1"
-        git status --short --untracked-files
-    done
+function die {
+    # Prints a given error message,
+    # optionally writes a given command to the clipboard,
+    # and exits with a given code.
+    >&2 printf -- "${r}Error: ${1}${n}\n"
+
+    if [ -n "$3" ] && command -v xclip >/dev/null && [ -n "$DISPLAY" ] ; then
+        printf '%s' "$3" | xclip -i -f -selection primary | xclip -i -selection clipboard
+        if [ $((PIPESTATUS[1]+PIPESTATUS[2])) -eq 0 ] ; then
+            printf "Command '${3}' written to system clipboard\n"
+        fi
+    fi
+    exit "$2"
 }
 
 function git_fetch_and_pull_or_die {
@@ -197,6 +102,106 @@ function git_push_or_die {
     fi
 }
 
+function load_reposet_or_die {
+    # Loads a reposet with the given name,
+    # performs sanity checks
+    # and appends it to tbe array _repos.
+    # If no reposet is given, loads the default reposet.
+    reposet_file="${HOME}/.reposets/${1}.reposet"
+    if [ ! -f "$reposet_file" ] ; then
+        die "Expected existing reposet file at ${rb}${reposet_file}${r} but found none." 11
+    fi
+
+    # shellcheck disable=SC1090
+    source "$reposet_file"
+    sanity_check_reposet_or_die
+    _repos+=(${repos[@]})
+    n_repos="${#_repos[@]}"
+}
+
+function load_reposets_or_die {
+    # Loads the given reposets,
+    # performs sanity checks
+    # and adds the found repos into the array _repos.
+    # If no reposet is given, loads the default reposet.
+    if [ "$#" -ne 0 ] ; then
+        for reposet in "$@" ; do
+            load_reposet_or_die "$reposet"
+        done
+    else
+        load_reposet_or_die
+    fi
+}
+
+n_current_repo=0  # the current repository index
+function n_current_repo++ {
+    # Adds 1 to the common variable n_current_repo.
+    ((n_current_repo += 1))
+}
+
+function print_all_repos_status_or_die {
+    # Changes directory to each repo, or dies with the given exit code,
+    # and calls git status.
+    printf "Checking status for all repos:\n"
+    n_current_repo=0
+    for repo in "${_repos[@]}"; do
+        set_common_repo_variables "$repo"
+        printf "${bold}${repo_path}${n}\n"
+        cd_to_repo_or_die "$1"
+        git status --short --untracked-files
+    done
+}
+
+function print_common_repo_variables {
+    printf 'n_repos=%s\n' "$n_repos"
+    printf 'n_current_repo=%s\n' "$n_current_repo"
+    printf 'repo_path=%s\n' "$repo_path"
+    printf 'local_branch=%s\n' "$local_branch"
+    printf 'pull_remote=%s\n' "$pull_remote"
+    printf 'pull_branch=%s\n' "$pull_branch"
+    printf 'push_remote=%s\n' "$push_remote"
+    printf 'push_branch=%s\n' "$push_branch"
+}
+
+function print_current_repo_and_progress {
+    printf "${bold}(${n_current_repo}/${n_repos}) ${repo_path}${n}...\n"
+}
+
+function sanity_check_reposet_or_die {
+    # Checks if the reposet array 'repos' has the correct form.
+
+    # check reposet is not empty
+    if [ ${#repos[@]} -eq 0 ] ; then
+        msg="Error in ${BASH_SOURCE[0]} sourced by ${0}: Reposet array \"\$repos\" in file:"
+        msg="${msg} \"${rb}${reposet_file}${r}\" seems to be empty."
+        die "$msg" 12
+    fi
+
+    # check each reposet entry has correct size
+    wrong_lines="$(printf '%s\n' "${repos[@]}" | grep -Ensv '^([^:]+:){2}([^:]*:){3}[^:]*$')"
+    if [ -n "$wrong_lines" ] ; then
+        msg="Errors in ${BASH_SOURCE[0]} sourced by ${0}: Reposet array \"\$repos\" in file:"
+        msg="${msg} \"${rb}${reposet_file}${r}\" contains broken lines:\n"
+        msg="${msg}${wrong_lines}\n\n"
+        msg="${msg}A repository definition must contain 6 fields, each delimited by ':' in the"
+        msg="${msg} form:\n"
+        msg="${msg}<path>:<local branch>:[<remote pull repo>]:[<remote pull branch>]:"
+        msg="${msg}[<remote push repo>]:[<remote push branch>]\n"
+        die "$msg" 13
+    fi
+}
+
+function set_common_repo_variables {
+    # Sets common variables that relate to the given repo line.
+    n_repos="${#_repos[@]}"
+    repo_path="$(local_path "$1")"
+    local_branch="$(local_branch "$1")"
+    pull_remote="$(remote_pull_repo "$1")"
+    pull_branch="$(remote_pull_branch "$1")"
+    push_remote="$(remote_push_repo "$1")"
+    push_branch="$(remote_push_branch "$1")"
+}
+
 function get_element {
     # Retrieves the n-th ':' delimited element from the given string.
     # Usage get_element <line> <column>
@@ -222,12 +227,9 @@ function remote_push_branch {
     get_element "$1" 5
 }
 
-function print_current_repo_and_progress {
-    printf "${bold}(${n_current_repo}/${n_repos}) ${repo_path}${n}...\n"
-}
-
 # color codes
-# if you want to change them, redefine them with empty string '' or disable them
+# if you want to change them, redefine them with empty string '' or disable them by not calling
+# tbe function.
 # shellcheck disable=SC2034
 function define_color_codes {
     r='\e[0;31m'
