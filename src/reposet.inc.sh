@@ -137,6 +137,66 @@ function print_all_repos_status_or_die {
     done
 }
 
+function git_fetch_and_pull_or_die {
+    # Checks if the current repo can be used for fetching/pulling,
+    # if yes, calls git fetch
+    # and git pull --rebase
+    # In case of any error, dies with the exit code the git command returns.
+    if [ -z "$pull_remote" ] || [ -z "$pull_branch" ] ; then
+        printf -- "${b}Repo ${bb}$repo_path${b} is not set up for pulling.${n}\n"
+        return
+    fi
+
+    git fetch --prune --tags "$pull_remote" "$pull_branch"
+    code="$?"
+    if [ "$code" != 0 ] ; then
+        msg="Calling \`${rb}git fetch --prune --tags ${pull_remote} ${pull_branch}${r}\` on the"
+        msg="${msg} repo ${rb}${repo_path}${r} failed."
+        die "$msg" "$code" "cd \"${repo_path}\""
+    fi
+
+    git pull --rebase "$pull_remote" "$pull_branch"
+    code="$?"
+    if [ "$code" != 0 ] ; then
+        msg="Calling \`${rb}git pull --rebase ${pull_remote} ${pull_branch}${r}\` on the repo"
+        msg="${msg} ${rb}${repo_path}${r} failed: "
+        if [ "$code" == 1 ] ; then
+            msg="${msg} Did not find this remote branch."
+        elif [ "$code" == 128 ] ; then
+            msg="${msg} Merge conflict."
+        else
+            msg="${msg} Unknown error."
+        fi
+        die "$msg" "$code" "cd \"${repo_path}\""
+    fi
+}
+
+function git_push_or_die {
+    # Checks if the current repo can be used for pushing,
+    # if yes, calls git push or dies with the exit code git push returns.
+    if [ -z "$push_remote" ] || [ -z "$push_branch" ] ; then
+        printf -- "${b}Repo ${bb}$repo_path${b} is not set up for pushing.${n}\n"
+        return
+    fi
+
+    git push "$push_remote" "$local_branch":"$push_branch"
+    code="$?"
+    if [ "$code" == 1 ] ; then
+        return # 1 is "no new changes" on gerrit
+    elif [ "$code" != 0 ] ; then
+        msg="Calling \`${rb}git push ${push_remote} ${local_branch}:${push_branch}${r}\`"
+        msg="${msg} on the repo ${rb}${repo_path}${r} failed:"
+        if [ "$code" == 128 ] ; then
+            msg="${msg} Do you have access rights?"
+            error_msgs="${error_msgs}${msg}"
+            >&2 printf -- "${r}$msg${n}\n"
+        else
+            msg="${msg} Unknown reason."
+            die "$msg" "$code" "cd \"${repo_path}\""
+        fi
+    fi
+}
+
 function get_element {
     # Retrieves the n-th ':' delimited element from the given string.
     # Usage get_element <line> <column>

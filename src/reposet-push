@@ -49,30 +49,9 @@ for repo in "${_repos[@]}"; do
     cd_to_repo_or_die 1
     print_current_repo_and_progress
     check_if_local_branch_exists_or_die 2
-
-    if [ -z "$push_remote" ] || [ -z "$push_branch" ] ; then
-        printf -- "${b}Repo ${bb}$repo_path${b} is not set up for pushing.${n}\n"
-        continue
-    fi
-
-    git push "$push_remote" "$local_branch":"$push_branch"
-    code="$?"
-    if [ "$code" == 1 ] ; then
-        continue # 1 is "no new changes" on gerrit
-    elif [ "$code" != 0 ] ; then
-        msg="Calling \`${rb}git push ${push_remote} ${local_branch}:${push_branch}${r}\`"
-        msg="${msg} on the repo ${rb}${repo_path}${r} failed:"
-        if [ "$code" == 128 ] ; then
-            msg="${msg} Do you have access rights?"
-            error_msgs="${error_msgs}${msg}"
-            >&2 printf -- "${r}$msg${n}\n"
-        else
-            msg="${msg} Unknown reason."
-            die "$msg" 4 "cd \"${repo_path}\""
-        fi
-    fi
+    git_push_or_die
 done
 
-print_all_repos_status_or_die 5
+print_all_repos_status_or_die 3
 
 [ -n "$error_msgs" ] && >&2 printf -- "${r}${error_msgs}${n}\n"

@@ -150,7 +150,7 @@ The available commands are:
 - `reposet pull` - call `git pull --rebase` on the repos
 - `reposet push` - call `git push` on the repos
 - `reposet status` - call `git status` on the repos
-- `reposet sync` - call `git pull --rebase` and then `git push` on the repos
+- `reposet sync` - call `git pull --rebase` and then `git push` on each repo
 
 Calling `reposet <subcommand> --help` provides a usage description for each subcommand.
 
@@ -241,7 +241,6 @@ Happy coding!
 
 
 ## TODO
-- implement `reposet-sync`
 - write `README.md`
     - mention helper function to support uniformity.
     - mention in the coding section that common variables exist and that they are updated indirectly
