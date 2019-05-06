@@ -12,7 +12,7 @@ function show_usage {
     msg="${msg} given reposets and returns the output in a concise format.\n"
     msg="${msg}\n"
     msg="${msg}Usage:\n"
-    msg="${msg} ${script_name} [<reposet>...]\n"
+    msg="${msg}  ${script_name} [<reposet>...]\n"
     msg="${msg}\n"
     msg="${msg}Examples:\n"
     msg="${msg}  ${script_name}                  # calls \`git status -bsu\` on the default reposet\n"
