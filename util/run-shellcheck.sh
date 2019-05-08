@@ -8,4 +8,5 @@
 # ignore
 # SC2059: Don't use variables in the printf format string. Use printf "..%s.." "$foo".
 # SC2181: Check exit code directly with e.g. 'if mycmd;', not indirectly with $?.
-shellcheck -x --exclude SC2059,SC2181 src/*
+cd src || exit 1
+shellcheck -x --exclude SC2059,SC2181 *

@@ -95,7 +95,7 @@ while [ $# -gt 0 ] ; do
 done
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# shellcheck source=src/reposet.inc.sh
+# shellcheck source=reposet.inc.sh
 source "${script_dir}/reposet.inc.sh"
 load_reposets_or_die "${reposets[@]}"
 
