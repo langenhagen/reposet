@@ -214,10 +214,53 @@ It is written in `Python`.
 
 
 ## Coding
-TODO
+The sources lie in the subdirectory `src/`.
+Calling `reposet <subcommand>` runs the script `reposet` which triggers another appropriate script
+that follows the naming convention `reposet-*`.
+E.g. `reposet-pull` is triggered when calling `reposet pull`.
+Common functions and variables are stored in the file `reposet.inc.sh` which is sourced by most
+scripts.
+After sourcing the `reposet.inc.sh` and loading the reposets via the helper functions, the
+repository-specifications are stored in the array `_repos`.
+Likely, you want to iterate over this array.
+There are common variables that store the current repository's traits. Some functions assume these
+variables to be set. Those variables can be set by calling the function `set_common_repo_variables
+<repo-definition>` and the function `n_current_repo++`.
+
+A typical idiomatic procedure to load all repo definitions and iterate over them looks like this:
+```bash
+# load common sources
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=reposet.inc.sh
+source "${script_dir}/reposet.inc.sh"
+# load the repository-definitions into the array _repos
+load_reposets_or_die "$<REPOSET-NAMES>"
+
+# [...]
+
+for repo in "${_repos[@]}"; do
+    set_common_repo_variables "$repo"
+    n_current_repo++
+    cd_to_repo_or_die 1
+    print_current_repo_and_progress
+#   [...]
+done
+```
+
+### Colored Output
+`reposet` has colored output enabled by default.
+To change or disable this, overwrite the variables defined in the common function
+`define_color_codes`.
+
+### Linting
+There is a script that triggers linting with the project's preferences in `util/run-shellcheck.sh`.
+Call it from the root of the project like:
+```bash
+bash util/run-shellcheck.sh
+```
 
 
-## Roadmap
+## Future Roadmap
 At the moment, I am content with the features that `reposet` provides.
 I intend to add more command line arguments for the commands when the need arises.
 I already thought of some additions and improvements:
@@ -233,6 +276,8 @@ in order to provide flexibility and enable sharing of `*.reposet` files.
 
 Add `bash`-completion, `fish`-completion, and completion for other shells.
 
+Disable colored output via command line argument.
+
 
 ## Contributing
 Work on your stuff locally, branch, commit and modify to your heart's content.
@@ -241,11 +286,3 @@ Happy coding!
 
 
 ## TODO
-- write `README.md`
-    - mention helper function to support uniformity.
-    - mention in the coding section that common variables exist and that they are updated indirectly
-      via certain helper functions like `n_current_repo++` which are meant to be used in an
-      idiomatic way
-    - state, that you can combine several reposets but not the default reposet
-        - and that it may be wise that th default reposet is a symlink to a named reposet
-
