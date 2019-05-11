@@ -206,7 +206,7 @@ function get_element {
     # Retrieves the n-th ':' delimited element from the given string.
     # Usage get_element <line> <column>
     IFS=':' read -r -a line_array <<< "$1"
-    echo "${line_array[${2}]}"
+    printf -- "${line_array[${2}]}\n"
 }
 function local_path {
     get_element "$1" 0
