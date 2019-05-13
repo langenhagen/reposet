@@ -66,7 +66,7 @@ function git_fetch_and_pull_or_die {
         msg="Calling \`${rb}git pull --rebase ${pull_remote} ${pull_branch}${r}\` on the repo"
         msg="${msg} ${rb}${repo_path}${r} failed: "
         if [ "$code" == 1 ] ; then
-            msg="${msg} Did not find this remote branch."
+            msg="${msg} Either did not find this remote branch or conflicting local files exist."
         elif [ "$code" == 128 ] ; then
             msg="${msg} Merge conflict."
         else
