@@ -56,7 +56,12 @@ function git_fetch_and_pull_or_die {
     code="$?"
     if [ "$code" != 0 ] ; then
         msg="Calling \`${rb}git fetch --prune --tags ${pull_remote} ${pull_branch}${r}\` on the"
-        msg="${msg} repo ${rb}${repo_path}${r} failed."
+        msg="${msg} repo ${rb}${repo_path}${r} failed:"
+        if [ "$code" == 128 ] ; then
+            msg="${msg} Missing access rights."
+        else
+            msg="${msg} Unknown error."
+        fi
         die "$msg" "$code" "cd \"${repo_path}\""
     fi
 
