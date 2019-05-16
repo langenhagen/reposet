@@ -14,7 +14,7 @@ function check_if_local_branch_exists_or_die {
     # Checks if the local branch exists or dies with the given exit code.
     if ! git rev-parse --verify "$local_branch" 1>/dev/null 2>&1; then
         msg="The repo ${rb}${repo_path}${r} does not contain a branch called"
-        msg="${msg} ${rb}${local_branch}${r}"
+        msg+=" ${rb}${local_branch}${r}"
         die "$msg" "$1" "cd \"${repo_path}\""
     fi
 }
@@ -56,11 +56,11 @@ function git_fetch_and_pull_or_die {
     code="$?"
     if [ "$code" != 0 ] ; then
         msg="Calling \`${rb}git fetch --prune --tags ${pull_remote} ${pull_branch}${r}\` on the"
-        msg="${msg} repo ${rb}${repo_path}${r} failed:"
+        msg+=" repo ${rb}${repo_path}${r} failed:"
         if [ "$code" == 128 ] ; then
-            msg="${msg} Missing access rights."
+            msg+=" Missing access rights."
         else
-            msg="${msg} Unknown error."
+            msg+=" Unknown error."
         fi
         die "$msg" "$code" "cd \"${repo_path}\""
     fi
@@ -69,13 +69,13 @@ function git_fetch_and_pull_or_die {
     code="$?"
     if [ "$code" != 0 ] ; then
         msg="Calling \`${rb}git pull --rebase ${pull_remote} ${pull_branch}${r}\` on the repo"
-        msg="${msg} ${rb}${repo_path}${r} failed: "
+        msg+=" ${rb}${repo_path}${r} failed: "
         if [ "$code" == 1 ] ; then
-            msg="${msg} Either did not find this remote branch or conflicting local files exist."
+            msg+=" Either did not find this remote branch or conflicting local files exist."
         elif [ "$code" == 128 ] ; then
-            msg="${msg} Merge conflict."
+            msg+=" Merge conflict."
         else
-            msg="${msg} Unknown error."
+            msg+=" Unknown error."
         fi
         die "$msg" "$code" "cd \"${repo_path}\""
     fi
@@ -95,13 +95,13 @@ function git_push_or_die {
         return # 1 is "no new changes" on gerrit
     elif [ "$code" != 0 ] ; then
         msg="Calling \`${rb}git push ${push_remote} ${local_branch}:${push_branch}${r}\`"
-        msg="${msg} on the repo ${rb}${repo_path}${r} failed:"
+        msg+=" on the repo ${rb}${repo_path}${r} failed:"
         if [ "$code" == 128 ] ; then
-            msg="${msg} Do you have access rights?"
+            msg+=" Do you have access rights?"
             error_msgs="${error_msgs}${msg}"
             >&2 printf -- "${r}$msg${n}\n"
         else
-            msg="${msg} Unknown reason."
+            msg+=" Unknown reason."
             die "$msg" "$code" "cd \"${repo_path}\""
         fi
     fi
@@ -178,7 +178,7 @@ function sanity_check_reposet_or_die {
     # check reposet is not empty
     if [ ${#repos[@]} -eq 0 ] ; then
         msg="Error in ${BASH_SOURCE[0]} sourced by ${0}: Reposet array \"\$repos\" in file:"
-        msg="${msg} \"${rb}${reposet_file}${r}\" seems to be empty."
+        msg+=" \"${rb}${reposet_file}${r}\" seems to be empty."
         die "$msg" 12
     fi
 
@@ -186,12 +186,11 @@ function sanity_check_reposet_or_die {
     wrong_lines="$(printf '%s\n' "${repos[@]}" | grep -Ensv '^([^:]+:){2}([^:]*:){3}[^:]*$')"
     if [ -n "$wrong_lines" ] ; then
         msg="Errors in ${BASH_SOURCE[0]} sourced by ${0}: Reposet array \"\$repos\" in file:"
-        msg="${msg} \"${rb}${reposet_file}${r}\" contains broken lines:\n"
-        msg="${msg}${wrong_lines}\n\n"
-        msg="${msg}A repository definition must contain 6 fields, each delimited by ':' in the"
-        msg="${msg} form:\n"
-        msg="${msg}<path>:<local branch>:[<remote pull repo>]:[<remote pull branch>]:"
-        msg="${msg}[<remote push repo>]:[<remote push branch>]\n"
+        msg+=" \"${rb}${reposet_file}${r}\" contains broken lines:\n"
+        msg+="${wrong_lines}\n\n"
+        msg+="A repository definition must contain 6 fields, each delimited by ':' in the form:\n"
+        msg+="<path>:<local branch>:[<remote pull repo>]:[<remote pull branch>]:"
+        msg+="[<remote push repo>]:[<remote push branch>]\n"
         die "$msg" 13
     fi
 }
