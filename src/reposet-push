@@ -1,34 +1,29 @@
 #!/bin/bash
 #
-# Pushes the local default branches to the default remotes and branches.
-#
 # author: andreasl
 
-function show_usage {
-    script_name="${0##*/}"
+script_name="${0##*/}"
+IFS= read -r -d '' script_description << HELP_EOF
+${script_name}
+Pushes the local default branches to the default remotes and branches.
+Aborts and reports as soon as an error occurs.
+If no errors are catched, runs \`git status --short --untracked-files\` for each repo afterwards.
 
-    msg="${script_name}\n"
-    msg="${msg}Pushes the local default branches to the default remotes and branches.\n"
-    msg="${msg}Aborts and reports as soon as an error occurs.\n"
-    msg="${msg}If no errors are catched, runs \`git status --short --untracked-files\` for each"
-    msg="${msg} repo afterwards.\n"
-    msg="${msg}\n"
-    msg="${msg}Usage:\n"
-    msg="${msg}  ${script_name} [<reposet>...]\n"
-    msg="${msg}\n"
-    msg="${msg}Examples:\n"
-    msg="${msg}  ${script_name}                  # calls \`git push\` on all repos in the default reposet\n"
-    msg="${msg}  ${script_name} my               # calls \`git push\` on all repos in the reposet \"my\"\n"
-    msg="${msg}  ${script_name} my work          # calls \`git push\` on all repos in the reposets \"my\" and \"work\"\n"
-    msg="${msg}  ${script_name} -h               # prints the usage message\n"
-    msg="${msg}  ${script_name} --help           # prints the usage message\n"
-    printf "$msg"
-}
+Usage:
+  ${script_name} [<reposet>...]
+
+Examples:
+  ${script_name}             # calls \`git push\` on all repos in the default reposet
+  ${script_name} my          # calls \`git push\` on all repos in the reposet \"my\"
+  ${script_name} my work     # calls \`git push\` on all repos in the reposets \"my\" and \"work\"
+  ${script_name} -h          # prints the usage message
+  ${script_name} --help      # prints the usage message
+HELP_EOF
 
 while [ $# -gt 0 ] ; do
     case "$1" in
     -h|--help)
-        show_usage
+        printf -- "$script_description"
         exit 0
         ;;
     *) # reposet name / unknown option

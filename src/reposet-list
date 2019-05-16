@@ -1,51 +1,47 @@
 #!/bin/bash
 #
-# Lists the repos in the given reposets.
-#
 # author: andreasl
 
-function show_usage {
-    script_name="${0##*/}"
+script_name="${0##*/}"
+IFS= read -r -d '' script_description << HELP_EOF
+${script_name}
+Lists the repos in the given reposets.
+By default, prints the paths to the repos, but can also print the other information stored in the
+reposets.
 
-    msg="${script_name}\n"
-    msg="${msg}Lists the repos in the given reposets.\n"
-    msg="${msg}By default, prints the paths to the repos, but can also print the other information"
-    msg="${msg} stored in the reposets.\n"
-    msg="${msg}\n"
-    msg="${msg}Usage:\n"
-    msg="${msg}  ${script_name} [OPTIONS] [<reposet>...]\n"
-    msg="${msg}\n"
-    msg="${msg}Options:\n"
-    msg="${msg}  -a, --all               Prints all information about each repo.\n"
-    msg="${msg}                          Implies --branch, --pull and --push.\n"
-    msg="${msg}  -b, --branch            Prints local default branch name.\n"
-    msg="${msg}  -n, --no-numbers        Omits the number that preceedes each output line.\n"
-    msg="${msg}  --pull                  Prints the remote and remote branch used to pull.\n"
-    msg="${msg}                          Implies --pull-remote and --pull-branch.\n"
-    msg="${msg}  --pull-branch           Prints the remote branch name from which to pull.\n"
-    msg="${msg}  --pull-remote           Prints the remote name from which to pull.\n"
-    msg="${msg}  --push                  Prints the remote and remote branch used to push.\n"
-    msg="${msg}                          Implies --push-remote and --push-branch.\n"
-    msg="${msg}  --push-branch           Prints the remote branch name to which to push.\n"
-    msg="${msg}  --push-remote           Prints the remote name to which to push.\n"
-    msg="${msg}  -r, --raw               Prints the raw repo definition lines.\n"
-    msg="${msg}  -s, --summary           Prints the number of found repos at the last line.\n"
-    msg="${msg}\n"
-    msg="${msg}Examples:\n"
-    msg="${msg}  ${script_name}                  # Lists repo paths from the default reposet\n"
-    msg="${msg}  ${script_name} my               # Lists repo paths from the reposet \"my\"\n"
-    msg="${msg}  ${script_name} -all my work     # Lists all repo info from the reposets \"my\" and \"work\"\n"
-    msg="${msg}  ${script_name} -a -n -s my      # Lists all repo info from the reposet \"my\" without line numbers and with a summary line\n"
-    msg="${msg}  ${script_name} -h               # prints the usage message\n"
-    msg="${msg}  ${script_name} --help           # prints the usage message\n"
-    printf "$msg"
-}
+Usage:
+  ${script_name} [OPTIONS] [<reposet>...]
+
+Options:
+  -a, --all               Prints all information about each repo.
+                          Implies --branch, --pull and --push.
+  -b, --branch            Prints local default branch name.
+  -n, --no-numbers        Omits the number that preceedes each output line.
+  --pull                  Prints the remote and remote branch used to pull.
+                          Implies --pull-remote and --pull-branch.
+  --pull-branch           Prints the remote branch name from which to pull.
+  --pull-remote           Prints the remote name from which to pull.
+  --push                  Prints the remote and remote branch used to push.
+                          Implies --push-remote and --push-branch.
+  --push-branch           Prints the remote branch name to which to push.
+  --push-remote           Prints the remote name to which to push.
+  -r, --raw               Prints the raw repo definition lines.
+  -s, --summary           Prints the number of found repos at the last line.
+
+Examples:
+  ${script_name}                  # lists repo paths from the default reposet
+  ${script_name} my               # lists repo paths from the reposet \"my\"
+  ${script_name} -all my work     # lists all repo info from the reposets \"my\" and \"work\"
+  ${script_name} -a -n -s my      # lists all repo info from the reposet \"my\" without line numbers and with a summary line
+  ${script_name} -h               # prints the usage message
+  ${script_name} --help           # prints the usage message
+HELP_EOF
 
 show_numbers=true
 while [ $# -gt 0 ] ; do
     case "$1" in
     -h|--help)
-        show_usage
+        printf -- "$script_description"
         exit 0
         ;;
     -a|--all)
