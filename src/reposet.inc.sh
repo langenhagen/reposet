@@ -147,13 +147,21 @@ function n_current_repo++ {
 function print_all_repos_status_or_die {
     # Changes directory to each repo, or dies with the given exit code,
     # and calls git status.
-    printf "Checking status for all repos:\n"
+    max_path_length=0
+    for repo in "${_repos[@]}"; do
+        set_common_repo_variables "$repo"
+        n_current_repo++
+        [ ${#repo_path} -gt "$max_path_length" ] && max_path_length=${#repo_path}
+    done
+
     n_current_repo=0
     for repo in "${_repos[@]}"; do
         set_common_repo_variables "$repo"
-        printf "${bold}${repo_path}${n}\n"
-        cd_to_repo_or_die "$1"
-        git status --short --untracked-files
+        n_current_repo++
+        cd_to_repo_or_die 1
+
+        printf "%s" "$PWD"; printf "%0.s~" $(seq ${#PWD} "${max_path_length}");
+        git status --branch --short --untracked-files
     done
 }
 

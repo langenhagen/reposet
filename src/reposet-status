@@ -36,20 +36,4 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=reposet.inc.sh
 source "${script_dir}/reposet.inc.sh"
 load_reposets_or_die "$@"
-
-max_path_length=0
-for repo in "${_repos[@]}"; do
-    set_common_repo_variables "$repo"
-    n_current_repo++
-    [ ${#repo_path} -gt "$max_path_length" ] && max_path_length=${#repo_path}
-done
-
-n_current_repo=0
-for repo in "${_repos[@]}"; do
-    set_common_repo_variables "$repo"
-    n_current_repo++
-    cd_to_repo_or_die 1
-
-    printf "%s" "$PWD"; printf "%0.s~" $(seq ${#PWD} "${max_path_length}");
-    git status --branch --short --untracked-files
-done
+print_all_repos_status_or_die 1
