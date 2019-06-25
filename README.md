@@ -278,6 +278,9 @@ Add `bash`-completion, `fish`-completion, and completion for other shells.
 
 Disable colored output via command line argument.
 
+Add a command line argument / configuration option `-w/--wait-for-fix` that pauses the program upon
+error and lets the user continue with the failed repo.
+
 
 ## Contributing
 Work on your stuff locally, branch, commit and modify to your heart's content.
