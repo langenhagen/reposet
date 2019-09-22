@@ -36,7 +36,7 @@ The project is structured as follows:
 │   └── reposet                     The reposet command.
 ├── setup.sh                        Copies the reposet command into your environment.
 ├── uninstall.sh                    Removes the reposet command from your environment.
-└── util                            Utility scripts.
+└── util                            Contains utility scripts.
 ```
 
 
