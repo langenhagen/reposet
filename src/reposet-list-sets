@@ -12,9 +12,9 @@ Usage:
   ${script_name}
 
 Example:
-  ${script_name}             # lists the reposet names
-  ${script_name} -h          # prints the usage message
-  ${script_name} --help      # prints the usage message
+  ${script_name}             # list the reposet names
+  ${script_name} -h          # print the usage message
+  ${script_name} --help      # print the usage message
 HELP_EOF
 
 while [ "$#" -gt '0' ] ; do
@@ -27,7 +27,7 @@ while [ "$#" -gt '0' ] ; do
         break
         ;;
     esac
-    shift # past argument or value
+    shift
 done
 
 prefix_path="${HOME}/.reposets"

@@ -13,12 +13,16 @@ Usage:
   ${script_name} [<reposet>...]
 
 Examples:
-  ${script_name}             # calls \`git push\` on all repos in the default reposet
-  ${script_name} my          # calls \`git push\` on all repos in the reposet \"my\"
-  ${script_name} my work     # calls \`git push\` on all repos in the reposets \"my\" and \"work\"
-  ${script_name} -h          # prints the usage message
-  ${script_name} --help      # prints the usage message
+  ${script_name}             # call \`git push\` on all repos in the default reposet
+  ${script_name} my          # call \`git push\` on all repos in the reposet \"my\"
+  ${script_name} my work     # call \`git push\` on all repos in the reposets \"my\" and \"work\"
+  ${script_name} -h          # print the usage message
+  ${script_name} --help      # print the usage message
 HELP_EOF
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=reposet.inc.sh
+source "${script_dir}/reposet.inc.sh"
 
 while [ $# -gt 0 ] ; do
     case "$1" in
@@ -30,12 +34,9 @@ while [ $# -gt 0 ] ; do
         break
         ;;
     esac
-    shift # past argument or value
+    shift
 done
 
-script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# shellcheck source=reposet.inc.sh
-source "${script_dir}/reposet.inc.sh"
 load_reposets_or_die "$@"
 
 for repo in "${_repos[@]}"; do

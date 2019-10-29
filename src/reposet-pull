@@ -13,18 +13,26 @@ Aborts and reports as soon as an error occurs.
 If no errors are catched, runs \`git status --short --untracked-files\` for each repo afterwards.
 
 Usage:
-  ${script_name} [<reposet>...]
+  ${script_name} [-f|--force] [<reposet>...]
 
 Examples:
-  ${script_name}             # calls \`git pull --rebase\` on all repos in the default reposet
-  ${script_name} my          # calls \`git pull --rebase\` on all repos in the reposet \"my\"
-  ${script_name} my work     # calls \`git pull --rebase\` on all repos in the reposets \"my\" and \"work\"
-  ${script_name} -h          # prints the usage message
-  ${script_name} --help      # prints the usage message
+  ${script_name}             # call \`git pull --rebase\` on all repos in the default reposet
+  ${script_name} my          # call \`git pull --rebase\` on all repos in the reposet \"my\"
+  ${script_name} my work     # call \`git pull --rebase\` on all repos in the reposets \"my\" and \"work\"
+  ${script_name} --force my  # call \`git clean -dfx\` and \`git reset --hard HEAD\` prior to a pull
+  ${script_name} -h          # print the usage message
+  ${script_name} --help      # print the usage message
 HELP_EOF
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=reposet.inc.sh
+source "${script_dir}/reposet.inc.sh"
 
 while [ $# -gt 0 ] ; do
     case "$1" in
+    -f|--force)
+        use_force=true
+        ;;
     -h|--help)
         printf -- "$script_description"
         exit 0
@@ -33,12 +41,9 @@ while [ $# -gt 0 ] ; do
         break
         ;;
     esac
-    shift # past argument or value
+    shift
 done
 
-script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# shellcheck source=reposet.inc.sh
-source "${script_dir}/reposet.inc.sh"
 load_reposets_or_die "$@"
 
 for repo in "${_repos[@]}"; do

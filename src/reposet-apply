@@ -11,19 +11,23 @@ Usage:
   ${script_name} [-q|--quiet] [<reposet>...] [-- <command>]
 
 Examples:
-  ${script_name}                       # lists all repositories in the default reposet
-  ${script_name} my                    # lists all repositories in the reposet \"my\"
-  ${script_name} my work               # lists all repositories in the reposet \"my\" and \"work\"
-  ${script_name} -- ls                 # lists all repositories and calls \`ls\` on the path of all git repos
-  ${script_name} -q -- ls              # calls \`ls\` on the path of all git repos but does not list the git repos
-  ${script_name} -q -- 'echo \$PWD'     # prints the path of each git repo
-  ${script_name} -h                    # prints the usage message
-  ${script_name} --help                # prints the usage message
+  ${script_name}                       # list all repositories in the default reposet
+  ${script_name} my                    # list all repositories in the reposet \"my\"
+  ${script_name} my work               # list all repositories in the reposet \"my\" and \"work\"
+  ${script_name} -- ls                 # list all repositories and calls \`ls\` on the path of all git repos
+  ${script_name} -q -- ls              # call \`ls\` on the path of all git repos but do not list the git repos
+  ${script_name} -q -- 'echo \$PWD'     # print the path of each git repo
+  ${script_name} -h                    # print the usage message
+  ${script_name} --help                # print the usage message
 
 Note:
   If you want to use subshell related-variables, like e.g. \$PWD, wrap them into single quotation
   marks '' so that they will not be expanded immediately.
 HELP_EOF
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=reposet.inc.sh
+source "${script_dir}/reposet.inc.sh"
 
 reposets=()
 while [ $# -gt 0 ] ; do
@@ -32,7 +36,7 @@ while [ $# -gt 0 ] ; do
         quiet=true
         ;;
     --)
-        shift # past argument
+        shift
         command="$*"
         break
         ;;
@@ -44,12 +48,9 @@ while [ $# -gt 0 ] ; do
         reposets+=("$1")
         ;;
     esac
-    shift # past argument or value
+    shift
 done
 
-script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# shellcheck source=reposet.inc.sh
-source "${script_dir}/reposet.inc.sh"
 load_reposets_or_die "${reposets[@]}"
 
 for repo in "${_repos[@]}"; do

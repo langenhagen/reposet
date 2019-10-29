@@ -38,7 +38,7 @@ For more information visit http://github.com/langenhagen/reposet.
 HELP_EOF
 
 function show_version {
-    printf 'reposet version %s\n' '0.8.7'
+    printf 'reposet version %s\n' '0.9.0'
 }
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
