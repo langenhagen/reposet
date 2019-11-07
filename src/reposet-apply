@@ -10,6 +10,9 @@ Calls a given bash command or series of commands on each repository in the given
 Usage:
   ${script_name} [-q|--quiet] [<reposet>...] [-- <command>]
 
+Options:
+  -q, --quiet:    Omit progress information.
+
 Examples:
   ${script_name}                       # list all repositories in the default reposet
   ${script_name} my                    # list all repositories in the reposet \"my\"

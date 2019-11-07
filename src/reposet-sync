@@ -15,15 +15,21 @@ Aborts and reports as soon as an error occurs.
 If no errors are catched, runs \`git status --short --untracked-files\` for each repo afterwards.
 
 Usage:
-  ${script_name} [-f|--force] [<reposet>...]
+  ${script_name} [OPTIONS] [<reposet>...]
+
+Options:
+  -f, --force:    Remove conflicting files prior to syncing by calling \`git clean -dfx\` and
+                  \`git reset --hard HEAD\`.
+  -t, --tags:     Push also tags to the remote. Tags from the remote are always fetched.
 
 Examples:
-  ${script_name}             # sync all repos in the default reposet
-  ${script_name} my          # sync all repos in the reposet \"my\"
-  ${script_name} my work     # sync all repos in the reposets \"my\" and \"work\"
-  ${script_name} --force my  # call \`git clean -dfx\` and \`git reset --hard HEAD\` prior to a sync
-  ${script_name} -h          # print the usage message
-  ${script_name} --help      # print the usage message
+  ${script_name}               # sync all repos in the default reposet
+  ${script_name} my            # sync all repos in the reposet \"my\"
+  ${script_name} my work       # sync all repos in the reposets \"my\" and \"work\"
+  ${script_name} --tags work   # sync all repos in the reposet \"my\" and push local tags
+  ${script_name} --force my    # call \`git clean -dfx\` and \`git reset --hard HEAD\` prior to sync
+  ${script_name} -h            # print the usage message
+  ${script_name} --help        # print the usage message
 HELP_EOF
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -38,6 +44,9 @@ while [ $# -gt 0 ] ; do
     -h|--help)
         printf -- "$script_description"
         exit 0
+        ;;
+    -t|--tags)
+        push_tags=true
         ;;
     *) # reposet name / unknown option
         break

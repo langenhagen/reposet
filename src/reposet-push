@@ -10,11 +10,15 @@ Aborts and reports as soon as an error occurs.
 If no errors are catched, runs \`git status --short --untracked-files\` for each repo afterwards.
 
 Usage:
-  ${script_name} [<reposet>...]
+  ${script_name} [-t|--tags] [<reposet>...]
+
+Options:
+  -t, --tags:     Push also tags to the remote.
 
 Examples:
   ${script_name}             # call \`git push\` on all repos in the default reposet
   ${script_name} my          # call \`git push\` on all repos in the reposet \"my\"
+  ${script_name} my          # call \`git push --tags\` on all repos in the reposet \"my\"
   ${script_name} my work     # call \`git push\` on all repos in the reposets \"my\" and \"work\"
   ${script_name} -h          # print the usage message
   ${script_name} --help      # print the usage message
@@ -29,6 +33,9 @@ while [ $# -gt 0 ] ; do
     -h|--help)
         printf -- "$script_description"
         exit 0
+        ;;
+    -t|--tags)
+        push_tags=true
         ;;
     *) # reposet name / unknown option
         break

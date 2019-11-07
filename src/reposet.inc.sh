@@ -5,6 +5,7 @@
 # author: andreasl
 
 use_force=false
+push_tags=false
 
 function cd_to_repo_or_die {
     # cd into a repository ir die.
@@ -99,7 +100,11 @@ function git_push_or_die {
         return
     fi
 
-    git push "$push_remote" "$local_branch":"$push_branch"
+    if [ "$push_tags" == true ] ; then
+        git push --tags "$push_remote" "$local_branch":"$push_branch"
+    else
+        git push "$push_remote" "$local_branch":"$push_branch"
+    fi
     code="$?"
     if [ "$code" == 1 ] ; then
         return # 1 is "no new changes" on gerrit

@@ -15,6 +15,10 @@ If no errors are catched, runs \`git status --short --untracked-files\` for each
 Usage:
   ${script_name} [-f|--force] [<reposet>...]
 
+Options:
+  -f, --force:    Remove conflicting files prior to pulling by calling \`git clean -dfx\` and
+                  \`git reset --hard HEAD\`.
+
 Examples:
   ${script_name}             # call \`git pull --rebase\` on all repos in the default reposet
   ${script_name} my          # call \`git pull --rebase\` on all repos in the reposet \"my\"
