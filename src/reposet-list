@@ -13,20 +13,20 @@ Usage:
   ${script_name} [OPTIONS] [<reposet>...]
 
 Options:
-  -a, --all               Prints all information about each repo.
-                          Implies --branch, --pull and --push.
-  -b, --branch            Prints local default branch name.
-  -n, --no-numbers        Omits the number that preceedes each output line.
-  --pull                  Prints the remote and remote branch used to pull.
-                          Implies --pull-remote and --pull-branch.
-  --pull-branch           Prints the remote branch name from which to pull.
-  --pull-remote           Prints the remote name from which to pull.
-  --push                  Prints the remote and remote branch used to push.
-                          Implies --push-remote and --push-branch.
-  --push-branch           Prints the remote branch name to which to push.
-  --push-remote           Prints the remote name to which to push.
-  -r, --raw               Prints the raw repo definition lines.
-  -s, --summary           Prints the number of found repos at the last line.
+  -a, --all               Print all information about each repo.
+                          Imply --branch, --pull and --push.
+  -b, --branch            Print local default branch name.
+  -n, --no-numbers        Omit the number that preceedes each output line.
+  --pull                  Print the remote and remote branch used to pull.
+                          Imply --pull-remote and --pull-branch.
+  --pull-branch           Print the remote branch name from which to pull.
+  --pull-remote           Print the remote name from which to pull.
+  --push                  Print the remote and remote branch used to push.
+                          Imply --push-remote and --push-branch.
+  --push-branch           Print the remote branch name to which to push.
+  --push-remote           Print the remote name to which to push.
+  -r, --raw               Print the raw repo definition lines.
+  -s, --summary           Print the number of found repos at the last line.
 
 Examples:
   ${script_name}                  # list repo paths from the default reposet
