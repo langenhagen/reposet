@@ -1,5 +1,4 @@
 #!/bin/bash
-#
 # Contains common functions and variables for the reposet subcommands.
 #
 # author: andreasl

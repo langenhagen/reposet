@@ -1,5 +1,4 @@
 #!/bin/bash
-#
 # Contains the command 'reposet'.
 # Dispatches to the given subcommands or prints the help-message.
 #

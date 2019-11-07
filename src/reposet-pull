@@ -1,5 +1,4 @@
 #!/bin/bash
-#
 # author: andreasl
 
 script_name="${0##*/}"
