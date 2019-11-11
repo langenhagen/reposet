@@ -36,9 +36,9 @@ function die {
     # and exit with a given code.
     >&2 printf -- "${r}Error: ${1}${n}\n"
 
-    if [ -n "$3" ] && command -v xclip >/dev/null && [ -n "$DISPLAY" ] ; then
+    if [ -n "$3" ] && command -v xclip >/dev/null && [ -n "$DISPLAY" ]; then
         printf '%s' "$3" | xclip -i -f -selection primary | xclip -i -selection clipboard
-        if [ $((PIPESTATUS[1]+PIPESTATUS[2])) -eq 0 ] ; then
+        if [ $((PIPESTATUS[1]+PIPESTATUS[2])) -eq 0 ]; then
             printf "Command '${3}' written to system clipboard\n"
         fi
     fi
@@ -52,17 +52,17 @@ function git_fetch_and_pull_or_die {
     # If $use_force is set to 'true', call git clean -dfx and git reset --hard HEAD
     # prior to pulling.
     # In case of any error, die with the exit code the git command returns.
-    if [ -z "$pull_remote" ] || [ -z "$pull_branch" ] ; then
+    if [ -z "$pull_remote" ] || [ -z "$pull_branch" ]; then
         printf -- "${b}Repo ${bb}$repo_path${b} is not set up for pulling.${n}\n"
         return
     fi
 
     git fetch --prune --tags "$pull_remote" "$pull_branch"
     code="$?"
-    if [ "$code" -ne 0 ] ; then
+    if [ "$code" -ne 0 ]; then
         msg="Calling \`${rb}git fetch --prune --tags ${pull_remote} ${pull_branch}${r}\` on the"
         msg+=" repo ${rb}${repo_path}${r} failed:"
-        if [ "$code" -eq 128 ] ; then
+        if [ "$code" -eq 128 ]; then
             msg+=" Missing access rights."
         else
             msg+=" Unknown error."
@@ -77,12 +77,12 @@ function git_fetch_and_pull_or_die {
 
     git pull --rebase "$pull_remote" "$pull_branch"
     code="$?"
-    if [ "$code" -ne 0 ] ; then
+    if [ "$code" -ne 0 ]; then
         msg="Calling \`${rb}git pull --rebase ${pull_remote} ${pull_branch}${r}\` on the repo"
         msg+=" ${rb}${repo_path}${r} failed: "
-        if [ "$code" -eq 1 ] ; then
+        if [ "$code" -eq 1 ]; then
             msg+=" Either did not find this remote branch or conflicting local files exist."
-        elif [ "$code" -eq 128 ] ; then
+        elif [ "$code" -eq 128 ]; then
             msg+=" Merge conflict."
         else
             msg+=" Unknown error."
@@ -94,26 +94,26 @@ function git_fetch_and_pull_or_die {
 function git_push_or_die {
     # Check if the current repo can be used for pushing,
     # if yes, call git push or die with the exit code git push returns.
-    if [ -z "$push_remote" ] || [ -z "$push_branch" ] ; then
+    if [ -z "$push_remote" ] || [ -z "$push_branch" ]; then
         printf -- "${b}Repo ${bb}$repo_path${b} is not set up for pushing.${n}\n"
         return
     fi
 
-    if [ "$push_tags" == true ] ; then
+    if [ "$push_tags" == true ]; then
         git push --tags "$push_remote" "$local_branch":"$push_branch"
     else
         git push "$push_remote" "$local_branch":"$push_branch"
     fi
     code="$?"
-    if [ "$code" -eq 1 ] ; then
+    if [ "$code" -eq 1 ]; then
         # possibly rejected from gerrit side
         msg="Calling \`${yb}git push ${push_remote} ${local_branch}:${push_branch}${y}\`"
         msg+=" on the repo ${yb}${repo_path}${y} failed with exit code 1."
         >&2 printf -- "${y}$msg${n}\n"
-    elif [ "$code" -ne 0 ] ; then
+    elif [ "$code" -ne 0 ]; then
         msg="Calling \`${rb}git push ${push_remote} ${local_branch}:${push_branch}${r}\`"
         msg+=" on the repo ${rb}${repo_path}${r} failed:"
-        if [ "$code" -eq 128 ] ; then
+        if [ "$code" -eq 128 ]; then
             msg+=" Do you have access rights?"
             error_msgs="${error_msgs}${msg}"
             >&2 printf -- "${r}$msg${n}\n"
@@ -130,7 +130,7 @@ function load_reposet_or_die {
     # and append it to tbe array _repos.
     # If no reposet is given, load the default reposet.
     reposet_file="${HOME}/.reposets/${1}.reposet"
-    if [ ! -f "$reposet_file" ] ; then
+    if [ ! -f "$reposet_file" ]; then
         die "Expected existing reposet file at ${rb}${reposet_file}${r} but found none." 11
     fi
 
@@ -146,7 +146,7 @@ function load_reposets_or_die {
     # perform sanity checks
     # and add the found repos into the array _repos.
     # If no reposet is given, load the default reposet.
-    if [ "$#" -ne 0 ] ; then
+    if [ "$#" -ne 0 ]; then
         for reposet in "$@" ; do
             load_reposet_or_die "$reposet"
         done
@@ -201,7 +201,7 @@ function sanity_check_reposet_or_die {
     # Check if the reposet array 'repos' has the correct form.
 
     # check reposet is not empty
-    if [ ${#repos[@]} -eq 0 ] ; then
+    if [ ${#repos[@]} -eq 0 ]; then
         msg="Error in ${BASH_SOURCE[0]} sourced by ${0}: Reposet array \"\$repos\" in file:"
         msg+=" \"${rb}${reposet_file}${r}\" seems to be empty."
         die "$msg" 12
@@ -209,7 +209,7 @@ function sanity_check_reposet_or_die {
 
     # check each reposet entry has correct size
     wrong_lines="$(printf '%s\n' "${repos[@]}" | grep -Ensv '^([^:]+:){2}([^:]*:){3}[^:]*$')"
-    if [ -n "$wrong_lines" ] ; then
+    if [ -n "$wrong_lines" ]; then
         msg="Errors in ${BASH_SOURCE[0]} sourced by ${0}: Reposet array \"\$repos\" in file:"
         msg+=" \"${rb}${reposet_file}${r}\" contains broken lines:\n"
         msg+="${wrong_lines}\n\n"
