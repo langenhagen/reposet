@@ -106,7 +106,10 @@ function git_push_or_die {
     fi
     code="$?"
     if [ "$code" -eq 1 ] ; then
-        return # 1 error from gerrit side
+        # 1 error from gerrit side
+        msg="Calling \`${yb}git push ${push_remote} ${local_branch}:${push_branch}${y}\`"
+        msg+=" on the repo ${yb}${repo_path}${y} failed with exit code 1."
+        >&2 printf -- "${y}$msg${n}\n"
     elif [ "$code" -ne 0 ] ; then
         msg="Calling \`${rb}git push ${push_remote} ${local_branch}:${push_branch}${r}\`"
         msg+=" on the repo ${rb}${repo_path}${r} failed:"
@@ -260,10 +263,12 @@ function remote_push_branch {
 function define_color_codes {
     r='\e[0;31m'
     g='\e[0;32m'
+    y='\e[0;33m'
     b='\e[0;34m'
     bold='\e[1m'
     rb='\e[1;31m'
     gb='\e[1;32m'
+    yb='\e[1;33m'
     bb='\e[1;34m'
     n='\e[0m'
 }
