@@ -59,10 +59,10 @@ function git_fetch_and_pull_or_die {
 
     git fetch --prune --tags "$pull_remote" "$pull_branch"
     code="$?"
-    if [ "$code" != 0 ] ; then
+    if [ "$code" -ne 0 ] ; then
         msg="Calling \`${rb}git fetch --prune --tags ${pull_remote} ${pull_branch}${r}\` on the"
         msg+=" repo ${rb}${repo_path}${r} failed:"
-        if [ "$code" == 128 ] ; then
+        if [ "$code" -eq 128 ] ; then
             msg+=" Missing access rights."
         else
             msg+=" Unknown error."
@@ -77,12 +77,12 @@ function git_fetch_and_pull_or_die {
 
     git pull --rebase "$pull_remote" "$pull_branch"
     code="$?"
-    if [ "$code" != 0 ] ; then
+    if [ "$code" -ne 0 ] ; then
         msg="Calling \`${rb}git pull --rebase ${pull_remote} ${pull_branch}${r}\` on the repo"
         msg+=" ${rb}${repo_path}${r} failed: "
-        if [ "$code" == 1 ] ; then
+        if [ "$code" -eq 1 ] ; then
             msg+=" Either did not find this remote branch or conflicting local files exist."
-        elif [ "$code" == 128 ] ; then
+        elif [ "$code" -eq 128 ] ; then
             msg+=" Merge conflict."
         else
             msg+=" Unknown error."
@@ -105,12 +105,12 @@ function git_push_or_die {
         git push "$push_remote" "$local_branch":"$push_branch"
     fi
     code="$?"
-    if [ "$code" == 1 ] ; then
-        return # 1 is "no new changes" on gerrit
-    elif [ "$code" != 0 ] ; then
+    if [ "$code" -eq 1 ] ; then
+        return # 1 error from gerrit side
+    elif [ "$code" -ne 0 ] ; then
         msg="Calling \`${rb}git push ${push_remote} ${local_branch}:${push_branch}${r}\`"
         msg+=" on the repo ${rb}${repo_path}${r} failed:"
-        if [ "$code" == 128 ] ; then
+        if [ "$code" -eq 128 ] ; then
             msg+=" Do you have access rights?"
             error_msgs="${error_msgs}${msg}"
             >&2 printf -- "${r}$msg${n}\n"
