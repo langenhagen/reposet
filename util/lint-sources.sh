@@ -1,5 +1,4 @@
 #!/bin/bash
-#
 # Runs the linter shellcheck with the project's preferences.
 # Run it from the project's root directory in order to make shellcheck follow source statements.
 #
