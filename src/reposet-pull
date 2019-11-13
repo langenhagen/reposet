@@ -31,7 +31,7 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=reposet.inc.sh
 source "${script_dir}/reposet.inc.sh"
 
-while [ $# -gt 0 ] ; do
+while [ $# -gt 0 ]; do
     case "$1" in
     -f|--force)
         use_force=true

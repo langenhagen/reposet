@@ -41,7 +41,7 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${script_dir}/reposet.inc.sh"
 
 show_numbers=true
-while [ $# -gt 0 ] ; do
+while [ $# -gt 0 ]; do
     case "$1" in
     -h|--help)
         printf -- "$script_description"

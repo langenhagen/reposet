@@ -32,7 +32,7 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${script_dir}/reposet.inc.sh"
 
 reposets=()
-while [ $# -gt 0 ] ; do
+while [ $# -gt 0 ]; do
     case "$1" in
     -q|--quiet)
         quiet=true

@@ -147,7 +147,7 @@ function load_reposets_or_die {
     # and add the found repos into the array _repos.
     # If no reposet is given, load the default reposet.
     if [ "$#" -ne 0 ]; then
-        for reposet in "$@" ; do
+        for reposet in "$@"; do
             load_reposet_or_die "$reposet"
         done
     else

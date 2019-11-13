@@ -16,7 +16,7 @@ Example:
   ${script_name} --help      # print the usage message
 HELP_EOF
 
-while [ "$#" -gt '0' ] ; do
+while [ "$#" -gt '0' ]; do
     case "$1" in
     -h|--help)
         printf -- "$script_description"
@@ -35,6 +35,6 @@ if ! cd "$prefix_path" 2>/dev/null; then
 fi
 
 [ -f "${prefix_path}/.reposet" ] && printf '(default)\n'
-for file in *.reposet ; do
+for file in *.reposet; do
     printf '%s\n' "${file%.reposet}"
 done
