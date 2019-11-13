@@ -95,7 +95,7 @@ done
 
 load_reposets_or_die "${reposets[@]}"
 
-if [ "$show_raw_output" != true ] ; then
+if [ "$show_raw_output" != true ]; then
 
     col_len_path=10
     col_len_local_branch=13
@@ -131,7 +131,7 @@ for repo in "${_repos[@]}"; do
 
     [ "$show_numbers" = true ] && printf '%-3s ' "${n_current_repo}:";
 
-    if [ "$show_raw_output" = true ] ; then
+    if [ "$show_raw_output" = true ]; then
             printf '%s\n' "$repo"
     else
         printf "%-${col_len_path}s  " "$repo_path"

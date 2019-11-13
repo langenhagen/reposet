@@ -42,7 +42,7 @@ function show_version {
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-if [ "$#" -gt '0' ] ; then
+if [ "$#" -gt '0' ]; then
     subcommand="$1"
     shift
     case "${subcommand}" in

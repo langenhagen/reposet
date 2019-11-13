@@ -30,7 +30,7 @@ while [ "$#" -gt '0' ] ; do
 done
 
 prefix_path="${HOME}/.reposets"
-if ! cd "$prefix_path" 2>/dev/null ; then
+if ! cd "$prefix_path" 2>/dev/null; then
     die "Could not cd into \"${prefix_path}\". Do you have a .reposets folder?" 1
 fi
 
