@@ -6,6 +6,21 @@
 use_force=false
 push_tags=false
 
+function die {
+    # Print a given error message,
+    # optionally write a given command to the clipboard,
+    # and exit with a given code.
+    >&2 printf -- "${r}Error: ${1}${n}\n"
+
+    if [ -n "$3" ] && command -v xclip >/dev/null && [ -n "$DISPLAY" ]; then
+        printf '%s' "$3" | xclip -i -f -selection primary | xclip -i -selection clipboard
+        if [ $((PIPESTATUS[1]+PIPESTATUS[2])) -eq 0 ]; then
+            printf "Command '${3}' written to system clipboard\n"
+        fi
+    fi
+    exit "$2"
+}
+
 function cd_to_repo_or_die {
     # cd into a repository ir die.
     if ! cd "$repo_path"; then
@@ -28,21 +43,6 @@ function checkout_local_branch_or_die {
         msg="Calling \`${rb}git checkout ${local_branch}${r}\` on ${rb}${repo_path}${r} failed."
         die "$msg" "$1" "cd \"${repo_path}\""
     fi
-}
-
-function die {
-    # Print a given error message,
-    # optionally write a given command to the clipboard,
-    # and exit with a given code.
-    >&2 printf -- "${r}Error: ${1}${n}\n"
-
-    if [ -n "$3" ] && command -v xclip >/dev/null && [ -n "$DISPLAY" ]; then
-        printf '%s' "$3" | xclip -i -f -selection primary | xclip -i -selection clipboard
-        if [ $((PIPESTATUS[1]+PIPESTATUS[2])) -eq 0 ]; then
-            printf "Command '${3}' written to system clipboard\n"
-        fi
-    fi
-    exit "$2"
 }
 
 function git_fetch_and_pull_or_die {
