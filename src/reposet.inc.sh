@@ -4,8 +4,9 @@
 # author: andreasl
 
 reposets_dir="${HOME}/.config/reposets"
-use_force=false
 push_tags=false
+use_force=false
+
 
 function die {
     # Print a given error message,
