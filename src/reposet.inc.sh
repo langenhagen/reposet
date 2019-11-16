@@ -109,7 +109,7 @@ function git_push_or_die {
     fi
     code="$?"
     if [ "$code" -eq 1 ]; then
-        # possibly rejected from gerrit side
+        # possibly rejected from server/gerrit side
         msg="Calling \`${yb}git push ${push_remote} ${local_branch}:${push_branch}${y}\`"
         msg+=" on the repo ${yb}${repo_path}${y} failed with exit code 1."
         >&2 printf -- "${y}$msg${n}\n"
