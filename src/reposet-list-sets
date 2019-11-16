@@ -37,7 +37,7 @@ if ! cd "$reposets_dir" 2>/dev/null; then
     die "Could not cd into \"${reposets_dir}\". Do you have a reposets folder?" 1
 fi
 
-[ -f "${reposets_dir}/.reposet" ] && printf '(default)\n'
+[ -f "${reposets_dir}/.reposet" ] && printf -- '(default)\n'
 for file in *.reposet; do
-    printf '%s\n' "${file%.reposet}"
+    printf -- '%s\n' "${file%.reposet}"
 done

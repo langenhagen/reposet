@@ -16,9 +16,9 @@ function die {
 
     if [ -n "$3" ] && command -v xclip >/dev/null && [ -n "$DISPLAY" ]; then
         cmd="cd \"${3}\""
-        printf '%s' "$cmd" | xclip -fi -selection primary | xclip -i -selection clipboard
+        printf -- '%s' "$cmd" | xclip -fi -selection primary | xclip -i -selection clipboard
         if [ $((PIPESTATUS[1]+PIPESTATUS[2])) -eq 0 ]; then
-            printf "Command '${cmd}' written to system clipboard\n"
+            printf -- "Command '${cmd}' written to system clipboard\n"
         fi
     fi
     exit "$2"
@@ -179,24 +179,24 @@ function print_all_repos_status_or_die {
         n_current_repo++
         cd_to_repo_or_die 1
 
-        printf "%s" "$PWD"; printf "%0.s~" $(seq ${#PWD} "${max_path_length}");
+        printf -- '%s' "$PWD"; printf -- '%0.s~' $(seq ${#PWD} "${max_path_length}");
         git status --branch --short --untracked-files
     done
 }
 
 function print_common_repo_variables {
-    printf 'n_repos=%s\n' "$n_repos"
-    printf 'n_current_repo=%s\n' "$n_current_repo"
-    printf 'repo_path=%s\n' "$repo_path"
-    printf 'local_branch=%s\n' "$local_branch"
-    printf 'pull_remote=%s\n' "$pull_remote"
-    printf 'pull_branch=%s\n' "$pull_branch"
-    printf 'push_remote=%s\n' "$push_remote"
-    printf 'push_branch=%s\n' "$push_branch"
+    printf -- 'n_repos=%s\n' "$n_repos"
+    printf -- 'n_current_repo=%s\n' "$n_current_repo"
+    printf -- 'repo_path=%s\n' "$repo_path"
+    printf -- 'local_branch=%s\n' "$local_branch"
+    printf -- 'pull_remote=%s\n' "$pull_remote"
+    printf -- 'pull_branch=%s\n' "$pull_branch"
+    printf -- 'push_remote=%s\n' "$push_remote"
+    printf -- 'push_branch=%s\n' "$push_branch"
 }
 
 function print_current_repo_and_progress {
-    printf "${bold}(${n_current_repo}/${n_repos}) ${repo_path}${n}...\n"
+    printf -- "${bold}(${n_current_repo}/${n_repos}) ${repo_path}${n}...\n"
 }
 
 function sanity_check_reposet_or_die {
@@ -210,7 +210,7 @@ function sanity_check_reposet_or_die {
     fi
 
     # check each reposet entry has correct size
-    wrong_lines="$(printf '%s\n' "${repos[@]}" | grep -Ensv '^([^:]+:){2}([^:]*:){3}[^:]*$')"
+    wrong_lines="$(printf -- '%s\n' "${repos[@]}" | grep -Ensv '^([^:]+:){2}([^:]*:){3}[^:]*$')"
     if [ -n "$wrong_lines" ]; then
         msg="Errors in ${BASH_SOURCE[0]} sourced by ${0}: Reposet array \"\$repos\" in file:"
         msg+=" \"${rb}${reposet_file}${r}\" contains broken lines:\n"
