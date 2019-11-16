@@ -8,17 +8,17 @@ n_current_repo=0  # the current repository index
 push_tags=false
 use_force=false
 
-
 function die {
     # Print a given error message,
-    # optionally write a given command to the clipboard,
+    # optionally write a cd-command to a given folder to the clipboard
     # and exit with a given code.
     >&2 printf -- "${r}Error: ${1}${n}\n"
 
     if [ -n "$3" ] && command -v xclip >/dev/null && [ -n "$DISPLAY" ]; then
-        printf '%s' "$3" | xclip -i -f -selection primary | xclip -i -selection clipboard
+        cmd="cd \"${3}\""
+        printf '%s' "$cmd" | xclip -fi -selection primary | xclip -i -selection clipboard
         if [ $((PIPESTATUS[1]+PIPESTATUS[2])) -eq 0 ]; then
-            printf "Command '${3}' written to system clipboard\n"
+            printf "Command '${cmd}' written to system clipboard\n"
         fi
     fi
     exit "$2"
@@ -36,7 +36,7 @@ function check_if_local_branch_exists_or_die {
     if ! git rev-parse --verify "$local_branch" 1>/dev/null 2>&1; then
         msg="The repo ${rb}${repo_path}${r} does not contain a branch called"
         msg+=" ${rb}${local_branch}${r}"
-        die "$msg" "$1" "cd \"${repo_path}\""
+        die "$msg" "$1" "$repo_path"
     fi
 }
 
@@ -44,7 +44,7 @@ function checkout_local_branch_or_die {
     # Check out the local branch or die with the given exit code.
     if ! git checkout "$local_branch"; then
         msg="Calling \`${rb}git checkout ${local_branch}${r}\` on ${rb}${repo_path}${r} failed."
-        die "$msg" "$1" "cd \"${repo_path}\""
+        die "$msg" "$1" "$repo_path"
     fi
 }
 
@@ -70,7 +70,7 @@ function git_fetch_and_pull_or_die {
         else
             msg+=" Unknown error."
         fi
-        die "$msg" "$code" "cd \"${repo_path}\""
+        die "$msg" "$code" "$repo_path"
     fi
 
     if [ "$use_force" == true ]; then
@@ -90,7 +90,7 @@ function git_fetch_and_pull_or_die {
         else
             msg+=" Unknown error."
         fi
-        die "$msg" "$code" "cd \"${repo_path}\""
+        die "$msg" "$code" "$repo_path"
     fi
 }
 
@@ -122,7 +122,7 @@ function git_push_or_die {
             >&2 printf -- "${r}$msg${n}\n"
         else
             msg+=" Unknown reason."
-            die "$msg" "$code" "cd \"${repo_path}\""
+            die "$msg" "$code" "$repo_path"
         fi
     fi
 }
