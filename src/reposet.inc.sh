@@ -3,6 +3,7 @@
 #
 # author: andreasl
 
+reposets_dir="${HOME}/.config/reposets"
 use_force=false
 push_tags=false
 
@@ -129,7 +130,7 @@ function load_reposet_or_die {
     # perform sanity checks
     # and append it to tbe array _repos.
     # If no reposet is given, load the default reposet.
-    reposet_file="${HOME}/.reposets/${1}.reposet"
+    reposet_file="${reposets_dir}/${1}.reposet"
     if [ ! -f "$reposet_file" ]; then
         die "Expected existing reposet file at ${rb}${reposet_file}${r} but found none." 11
     fi

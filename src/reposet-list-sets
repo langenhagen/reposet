@@ -29,12 +29,15 @@ while [ "$#" -gt '0' ]; do
     shift
 done
 
-prefix_path="${HOME}/.reposets"
-if ! cd "$prefix_path" 2>/dev/null; then
-    die "Could not cd into \"${prefix_path}\". Do you have a .reposets folder?" 1
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=reposet.inc.sh
+source "${script_dir}/reposet.inc.sh"
+
+if ! cd "$reposets_dir" 2>/dev/null; then
+    die "Could not cd into \"${reposets_dir}\". Do you have a reposets folder?" 1
 fi
 
-[ -f "${prefix_path}/.reposet" ] && printf '(default)\n'
+[ -f "${reposets_dir}/.reposet" ] && printf '(default)\n'
 for file in *.reposet; do
     printf '%s\n' "${file%.reposet}"
 done
