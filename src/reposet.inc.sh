@@ -6,6 +6,7 @@
 reposets_dir="${HOME}/.config/reposets"
 n_current_repo=0  # the current repository index
 push_tags=false
+spawn_subshell=true
 use_force=false
 
 function die {
@@ -24,6 +25,19 @@ function die {
     exit "$2"
 }
 
+function spawn_subshell_or_die {
+    # Spawn a subshell if $spawn_subshell is set to true,
+    # else call die() with the given error message, given error code and the current directory.
+    if [ "$spawn_subshell" == true ]; then
+        msg="Spawning a subshell into '${PWD}' so you can fix the issue. Continue running"
+        msg+=" reposet by entering 'exit'."
+        printf -- '%s\n' "$msg"
+        $SHELL
+    else
+        die "$1" "$2" "$PWD"
+    fi
+}
+
 function cd_to_repo_or_die {
     # cd into a repository ir die.
     if ! cd "$repo_path"; then
@@ -36,7 +50,7 @@ function check_if_local_branch_exists_or_die {
     if ! git rev-parse --verify "$local_branch" 1>/dev/null 2>&1; then
         msg="The repo ${rb}${repo_path}${r} does not contain a branch called"
         msg+=" ${rb}${local_branch}${r}"
-        die "$msg" "$1" "$repo_path"
+        spawn_subshell_or_die "$msg" "$1"
     fi
 }
 
@@ -44,7 +58,7 @@ function checkout_local_branch_or_die {
     # Check out the local branch or die with the given exit code.
     if ! git checkout "$local_branch"; then
         msg="Calling \`${rb}git checkout ${local_branch}${r}\` on ${rb}${repo_path}${r} failed."
-        die "$msg" "$1" "$repo_path"
+        spawn_subshell_or_die "$msg" "$1"
     fi
 }
 
@@ -70,7 +84,7 @@ function git_fetch_and_pull_or_die {
         else
             msg+=" Unknown error."
         fi
-        die "$msg" "$code" "$repo_path"
+        spawn_subshell_or_die "$msg" "$code"
     fi
 
     if [ "$use_force" == true ]; then
@@ -90,7 +104,7 @@ function git_fetch_and_pull_or_die {
         else
             msg+=" Unknown error."
         fi
-        die "$msg" "$code" "$repo_path"
+        spawn_subshell_or_die "$msg" "$code"
     fi
 }
 
@@ -122,7 +136,7 @@ function git_push_or_die {
             >&2 printf -- "${r}$msg${n}\n"
         else
             msg+=" Unknown reason."
-            die "$msg" "$code" "$repo_path"
+            spawn_subshell_or_die "$msg" "$code"
         fi
     fi
 }

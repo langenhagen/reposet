@@ -9,10 +9,11 @@ Aborts and reports as soon as an error occurs.
 If no errors are catched, runs \`git status --short --untracked-files\` for each repo afterwards.
 
 Usage:
-  ${script_name} [-t|--tags] [<reposet>...]
+  ${script_name} [OPTIONS] [<reposet>...]
 
 Options:
-  -t, --tags:     Push also tags to the remote.
+  -S, --no-spawn-shell:   Exit reposet in case of error instead of spawning a subshell.
+  -t, --tags:             Push also tags to the remote.
 
 Examples:
   ${script_name}             # call \`git push\` on all repos in the default reposet
@@ -32,6 +33,9 @@ while [ $# -gt 0 ]; do
     -h|--help)
         printf -- "$script_description"
         exit 0
+        ;;
+    -S|--no-spawn-shell)
+        spawn_subshell=false
         ;;
     -t|--tags)
         push_tags=true

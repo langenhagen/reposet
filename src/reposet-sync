@@ -17,9 +17,10 @@ Usage:
   ${script_name} [OPTIONS] [<reposet>...]
 
 Options:
-  -f, --force:    Remove conflicting files prior to syncing by calling \`git clean -dfx\` and
-                  \`git reset --hard HEAD\`.
-  -t, --tags:     Push also tags to the remote. Tags from the remote are always fetched.
+  -f, --force:            Remove conflicting files prior to syncing by calling \`git clean -dfx\`
+                          and \`git reset --hard HEAD\`.
+  -S, --no-spawn-shell:   Exit the program in case of error instead of spawning a subshell.
+  -t, --tags:             Push also tags to the remote. Tags from the remote are always fetched.
 
 Examples:
   ${script_name}               # sync all repos in the default reposet
@@ -43,6 +44,9 @@ while [ $# -gt 0 ]; do
     -h|--help)
         printf -- "$script_description"
         exit 0
+        ;;
+    -S|--no-spawn-shell)
+        spawn_subshell=false
         ;;
     -t|--tags)
         push_tags=true
