@@ -125,6 +125,7 @@ if [ "$show_raw_output" != true ]; then
     printf '\n'
 fi
 
+n_current_repo=0
 for repo in "${_repos[@]}"; do
     set_common_repo_variables "$repo"
     n_current_repo++

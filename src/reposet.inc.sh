@@ -4,6 +4,7 @@
 # author: andreasl
 
 reposets_dir="${HOME}/.config/reposets"
+n_current_repo=0  # the current repository index
 push_tags=false
 use_force=false
 
@@ -157,7 +158,6 @@ function load_reposets_or_die {
     fi
 }
 
-n_current_repo=0  # the current repository index
 function n_current_repo++ {
     # Add 1 to the common variable n_current_repo.
     ((n_current_repo += 1))
