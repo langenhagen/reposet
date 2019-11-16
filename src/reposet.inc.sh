@@ -259,8 +259,7 @@ function remote_push_branch {
 }
 
 # color codes
-# if you want to change them, redefine them with empty string '' or disable them by not calling
-# tbe function.
+# If you want to change them, redefine them. Disable them altogether by not calling the function.
 # shellcheck disable=SC2034
 function define_color_codes {
     r='\e[0;31m'
