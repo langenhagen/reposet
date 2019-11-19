@@ -286,3 +286,9 @@ Happy coding!
 
 
 ## TODO
+
+### Handle Some Server-Side Rejections Elegantly
+    - E.g., `! [remote rejected] master -> refs/for/master (no new changes)` should omit spilling a
+      warning. However, that would need to catch `stderr`. Also, `stderr` should ideally still be
+      printed to the console as `stderr`, in line with `stdout`, so, `... 2>&1 | tee 1>&2` may not
+      be ideal.
