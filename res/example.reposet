@@ -1,13 +1,18 @@
 #!/bin/bash
-#
 # Contains a list of git repository information for repos that may be worked with together.
 #
 # Contains a bash-array named 'repos' of git repo paths and their local default branches, their
-# default remotes and remote default branches for fetching and pushing, resepctively.
+# default remotes and remote default branches for fetching and pushing, respectively.
 # Each field is divided by the delimiter ':'.
 #
 # The format is as follows:
 # <path>:<local-branch>:<remote-pull-repo>:<remote-pull-branch>:<remote-push-repo>:<remote-push-branch>
+#
+# Fields for remotes and branches can be empty. In such cases, reposet will not pull or push the
+# according repos.
+#
+# Reposet does not consider submodules. Add submodules as normal repos to the reposets in order to
+# update them.
 #
 # author: andreasl
 
