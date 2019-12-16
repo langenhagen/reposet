@@ -36,7 +36,7 @@ Examples:
 For more information visit http://github.com/langenhagen/reposet.
 HELP_EOF
 
-function show_version {
+show_version() {
     printf -- 'reposet version %s\n' '1.1.0'
 }
 
