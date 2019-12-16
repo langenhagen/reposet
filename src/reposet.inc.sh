@@ -9,7 +9,7 @@ push_tags=false
 spawn_subshell=true
 use_force=false
 
-function die {
+die() {
     # Print a given error message,
     # optionally write a cd-command to a given folder to the clipboard
     # and exit with a given code.
@@ -25,7 +25,7 @@ function die {
     exit "$2"
 }
 
-function spawn_subshell_or_die {
+spawn_subshell_or_die() {
     # Spawn a subshell if $spawn_subshell is set to true,
     # else call die() with the given error message, given error code and the current directory.
     if [ "$spawn_subshell" == true ]; then
@@ -38,14 +38,14 @@ function spawn_subshell_or_die {
     fi
 }
 
-function cd_to_repo_or_die {
+cd_to_repo_or_die() {
     # cd into a repository ir die.
     if ! cd "$repo_path"; then
         die "Path ${rb}${repo_path}${r} does not exist." "$1"
     fi
 }
 
-function check_if_local_branch_exists_or_die {
+check_if_local_branch_exists_or_die() {
     # Check if the local branch exists or die with the given exit code.
     if ! git rev-parse --verify "$local_branch" 1>/dev/null 2>&1; then
         msg="The repo ${rb}${repo_path}${r} does not contain a branch called"
@@ -54,7 +54,7 @@ function check_if_local_branch_exists_or_die {
     fi
 }
 
-function checkout_local_branch_or_die {
+checkout_local_branch_or_die() {
     # Check out the local branch or die with the given exit code.
     if ! git checkout "$local_branch"; then
         msg="Calling \`${rb}git checkout ${local_branch}${r}\` on ${rb}${repo_path}${r} failed."
@@ -62,7 +62,7 @@ function checkout_local_branch_or_die {
     fi
 }
 
-function git_fetch_and_pull_or_die {
+git_fetch_and_pull_or_die() {
     # Check if the current repo can be used for fetching/pulling,
     # if yes, call git fetch,
     # and git pull --rebase
@@ -108,7 +108,7 @@ function git_fetch_and_pull_or_die {
     fi
 }
 
-function git_push_or_die {
+git_push_or_die() {
     # Check if the current repo can be used for pushing,
     # if yes, call git push or die with the exit code git push returns.
     if [ -z "$push_remote" ] || [ -z "$push_branch" ]; then
@@ -141,7 +141,7 @@ function git_push_or_die {
     fi
 }
 
-function load_reposet_or_die {
+load_reposet_or_die() {
     # Load a reposet with the given name,
     # perform sanity checks
     # and append it to tbe array _repos.
@@ -158,7 +158,7 @@ function load_reposet_or_die {
     n_repos="${#_repos[@]}"
 }
 
-function load_reposets_or_die {
+load_reposets_or_die() {
     # Load the given reposets,
     # perform sanity checks
     # and add the found repos into the array _repos.
@@ -172,12 +172,12 @@ function load_reposets_or_die {
     fi
 }
 
-function n_current_repo++ {
+n_current_repo++() {
     # Add 1 to the common variable n_current_repo.
     ((n_current_repo += 1))
 }
 
-function print_all_repos_status_or_die {
+print_all_repos_status_or_die() {
     # Change directory to each repo, or die with the given exit code,
     # and call git status.
     max_path_length=0
@@ -198,7 +198,7 @@ function print_all_repos_status_or_die {
     done
 }
 
-function print_common_repo_variables {
+print_common_repo_variables() {
     printf -- 'n_repos=%s\n' "$n_repos"
     printf -- 'n_current_repo=%s\n' "$n_current_repo"
     printf -- 'repo_path=%s\n' "$repo_path"
@@ -209,11 +209,11 @@ function print_common_repo_variables {
     printf -- 'push_branch=%s\n' "$push_branch"
 }
 
-function print_current_repo_and_progress {
+print_current_repo_and_progress() {
     printf -- "${bold}(${n_current_repo}/${n_repos}) ${repo_path}${n}...\n"
 }
 
-function sanity_check_reposet_or_die {
+sanity_check_reposet_or_die() {
     # Check if the reposet array 'repos' has the correct form.
 
     # check reposet is not empty
@@ -236,7 +236,7 @@ function sanity_check_reposet_or_die {
     fi
 }
 
-function set_common_repo_variables {
+set_common_repo_variables() {
     # Set common variables that relate to the given repo line.
     n_repos="${#_repos[@]}"
     repo_path="$(local_path "$1")"
@@ -247,35 +247,35 @@ function set_common_repo_variables {
     push_branch="$(remote_push_branch "$1")"
 }
 
-function get_element {
+get_element() {
     # Retrieve the n-th ':' delimited element from the given string.
     # Usage get_element <line> <column>
     IFS=':' read -r -a line_array <<< "$1"
     printf -- "${line_array[${2}]}\n"
 }
-function local_path {
+local_path() {
     get_element "$1" 0
 }
-function local_branch {
+local_branch() {
     get_element "$1" 1
 }
-function remote_pull_repo {
+remote_pull_repo() {
     get_element "$1" 2
 }
-function remote_pull_branch {
+remote_pull_branch() {
     get_element "$1" 3
 }
-function remote_push_repo {
+remote_push_repo() {
     get_element "$1" 4
 }
-function remote_push_branch {
+remote_push_branch() {
     get_element "$1" 5
 }
 
 # color codes
 # If you want to change them, redefine them. Disable them altogether by not calling the function.
 # shellcheck disable=SC2034
-function define_color_codes {
+define_color_codes() {
     r='\e[0;31m'
     g='\e[0;32m'
     y='\e[0;33m'
