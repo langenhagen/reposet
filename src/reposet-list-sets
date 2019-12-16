@@ -4,8 +4,8 @@
 script_name="${0##*/}"
 IFS= read -r -d '' script_description << HELP_EOF
 ${script_name}
-Lists all available reposets names, i.e. the filenames of the *.reposet files without the suffix.
-The nameless default reposet \".reposet\" is represented as \"(default)\", when available.
+List all available reposets names, i.e. the filenames of the *.reposet files without the suffix.
+Represent the nameless default reposet \".reposet\" as \"(default)\", when available.
 
 Usage:
   ${script_name}

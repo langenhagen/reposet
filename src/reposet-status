@@ -4,8 +4,8 @@
 script_name="${0##*/}"
 IFS= read -r -d '' script_description << HELP_EOF
 ${script_name}
-Calls \`git status --branch --short --untracked-files\` on each repository in the given reposets and
-returns the output in a concise format.
+Call \`git status --branch --short --untracked-files\` on each repository in the given reposets and
+return the output in a concise format.
 
 Usage:
   ${script_name} [<reposet>...]

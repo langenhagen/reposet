@@ -4,7 +4,7 @@
 script_name="${0##*/}"
 IFS= read -r -d '' script_description << HELP_EOF
 ${script_name}
-Calls a given bash command or series of commands on each repository in the given reposets.
+Call a given bash command or series of commands on each repository in the given reposets.
 
 Usage:
   ${script_name} [-q|--quiet] [<reposet>...] [-- <command>]

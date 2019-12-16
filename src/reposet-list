@@ -4,9 +4,9 @@
 script_name="${0##*/}"
 IFS= read -r -d '' script_description << HELP_EOF
 ${script_name}
-Lists the repos in the given reposets.
-By default, prints the paths to the repos, but can also print the other information stored in the
-reposets.
+List the repos in the given reposets.
+By default, print the paths to the repos. Optionally, also print the other information stored in
+the reposets.
 
 Usage:
   ${script_name} [OPTIONS] [<reposet>...]

@@ -4,14 +4,14 @@
 script_name="${0##*/}"
 IFS= read -r -d '' script_description << HELP_EOF
 ${script_name}
-Pulls the default remote branches and immediately after that pushes the local default branches to
-the default remotes.
-For each repo in the given reposets, checks out the local default branches, calls
-\`git fetch --prune --tags\` and calls \`git pull --rebase\` from the default remote pull branch
+Pull the default remote branches and immediately after that push the local default branches to the
+default remotes.
+For each repo in the given reposets, check out the local default branches, call
+\`git fetch --prune --tags\` and call \`git pull --rebase\` from the default remote pull branch
 onto the local default branch.
-Then pushes from the local default branches to the default remotes and branches.
-Aborts and reports as soon as an error occurs.
-If no errors are catched, runs \`git status --short --untracked-files\` for each repo afterwards.
+Then push from the local default branches to the default remotes and branches.
+Abort and report as soon as an error occurs.
+If no errors are catched, run \`git status --short --untracked-files\` for each repo afterwards.
 
 Usage:
   ${script_name} [OPTIONS] [<reposet>...]

@@ -4,9 +4,9 @@
 script_name="${0##*/}"
 IFS= read -r -d '' script_description << HELP_EOF
 ${script_name}
-Pushes the local default branches to the default remotes and branches.
-Aborts and reports as soon as an error occurs.
-If no errors are catched, runs \`git status --short --untracked-files\` for each repo afterwards.
+Push the local default branches to the default remotes and branches.
+Abort and report as soon as an error occurs.
+If no errors are catched, run \`git status --short --untracked-files\` for each repo afterwards.
 
 Usage:
   ${script_name} [OPTIONS] [<reposet>...]
