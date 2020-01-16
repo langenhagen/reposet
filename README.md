@@ -78,7 +78,7 @@ Calling the `reposet` command has the general form: `reposet <subcommand> [<repo
 For example, calling `reposet pull`, pulls changes from the default remote branches to the default
 local branches on all repositories in the default set of repositories.
 Calling `reposet pull my` pulls from the remote branches on the repos listed in a file
-`$HOME/.reposets/my.reposet` (see below in section **Reposet Files**).
+`$HOME/.config/.reposets/my.reposet` (see below in section **Reposet Files**).
 Calling `reposet pull my work` pulls from repos listed in the files `my.reposet` and
 `work.reposet`.
 
@@ -86,9 +86,10 @@ Calling `reposet pull my work` pulls from repos listed in the files `my.reposet`
 A reposet is a `bash` file with the extension `*.reposet` that defines an array whose elements
 describe an existing `git` repository.
 A `reposet` subcommand may source a `*.reposet` file in order to load repository information.
-A `*.reposet` file must be located in the directory `$HOME/.reposets`.
+A `*.reposet` file must be located in the directory `$HOME/.config/.reposets`.
 The name of a reposet is equal of the name of the file, without the suffix `.reposet`.
-For instance, a reposet called "my" would be defined in the file `$HOME/.reposets/my.reposet`.
+For instance, a reposet called "my" would be defined in the file
+`$HOME/.config/.reposets/my.reposet`.
 The special default reposet `.reposet` does not have a name and may be used when calling a `reposet`
 subcommand with no reposets specified.
 
@@ -124,11 +125,11 @@ rather define lists of repos than sets.
 
 ### Creating a Reposet
 An easy way to create a reposet, is to copy the file `res/example.reposet` into the directory
-`$HOME/.reposets` and modify the copy:
+`$HOME/.config/.reposets` and modify the copy:
 ```bash
-mkdir -p ~/.reposets
-cp res/example.reposet ~/.reposet/NAME.reposet  # adjust NAME
-vim ~/.reposets/NAME.reposet  # adjust NAME
+mkdir -p ~/.config/.reposets
+cp res/example.reposet ~/.config/.reposet/NAME.reposet  # adjust NAME
+vim ~/.config/.reposets/NAME.reposet  # adjust NAME
 ```
 Preferrably, reposets have simple and short names and start with a letter or a number.
 Well suited names are for example "all", "my" or "work".
@@ -164,7 +165,7 @@ To circumvent this limitation, create a named reposet that you want to use as de
 its `*.reposet` file in the default reposet file `.reposet`.
 For example, the file `.reposet` could source a named reposet "default":
 ```bash
-source ~/.reposets/default.reposet
+source ~/.config/.reposets/default.reposet
 ```
 
 Some subcommands have synonyms:
