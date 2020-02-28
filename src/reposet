@@ -13,7 +13,6 @@ Reposet provides a handful of subcommands to run common or specified actions on 
 repositories.
 
 Commands are:
-
   ${script_name} apply      - execute a given bash command or series of commands
   ${script_name} list       - list contents of given reposets
   ${script_name} list-sets  - list reposets
