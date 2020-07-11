@@ -26,10 +26,10 @@ After you set up your first reposet, call `reposet <command> [<reposet>...]`, to
 See below for further information.
 To get help with the commands, you can call `reposet <command> --help`.
 
-The project is structured as follows:
+The project has following structure:
 ```
 .
-├── README.md                       You are here now.
+├── README.md                       You are now here.
 ├── res                             Additional resources.
 │   └── example.reposet             Example reposet definition for reference.
 ├── src                             Contains the sources.
