@@ -218,7 +218,7 @@ sanity_check_reposet_or_die() {
 
     # check reposet is not empty
     if [ ${#repos[@]} -eq 0 ]; then
-        msg="Error in ${BASH_SOURCE[0]} sourced by ${0}: Reposet array \"\$repos\" in file:"
+        msg="In ${BASH_SOURCE[0]} sourced by ${0}: Reposet array \"\$repos\" in file:"
         msg+=" \"${rb}${reposet_file}${r}\" seems to be empty."
         die "$msg" 12
     fi
