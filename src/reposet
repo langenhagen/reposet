@@ -45,33 +45,15 @@ if [ "$#" -gt '0' ]; then
     subcommand="$1"
     shift
     case "${subcommand}" in
-    -h|--help|help)
-        printf -- "$script_description"
-        ;;
-    -v|--version|version)
-        show_version
-        ;;
-    apply)
-        bash "${script_dir}/reposet-apply" "$@"
-        ;;
-    list-sets|sets)
-        bash "${script_dir}/reposet-list-sets" "$@"
-        ;;
-    list|ls)
-        bash "${script_dir}/reposet-list" "$@"
-        ;;
-    pull|down)
-        bash "${script_dir}/reposet-pull" "$@"
-        ;;
-    push|up)
-        bash "${script_dir}/reposet-push" "$@"
-        ;;
-    status)
-        bash "${script_dir}/reposet-status" "$@"
-        ;;
-    sync)
-        bash "${script_dir}/reposet-sync" "$@"
-        ;;
+    -h|--help|help)         printf -- "$script_description" ;;
+    -v|--version|version)   show_version ;;
+    apply)                  bash "${script_dir}/reposet-apply"      "$@" ;;
+    list-sets|sets)         bash "${script_dir}/reposet-list-sets"  "$@" ;;
+    list|ls)                bash "${script_dir}/reposet-list"       "$@" ;;
+    pull|down)              bash "${script_dir}/reposet-pull"       "$@" ;;
+    push|up)                bash "${script_dir}/reposet-push"       "$@" ;;
+    status)                 bash "${script_dir}/reposet-status"     "$@" ;;
+    sync)                   bash "${script_dir}/reposet-sync"       "$@" ;;
     *) # unknown option
         first_reposet="$subcommand"
         bash "${script_dir}/reposet-status" "$first_reposet" "$@"
