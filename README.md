@@ -11,7 +11,8 @@ on given sets of repositories.
 `Reposet` also allows to run any command with the repositories' directories as the working
 directories.
 `Reposet` can handle several user-defined sets of repositories. It also supports a default set.
-`Reposet` is written in `bash` and does not require additional dependencies besides `git`.
+`Reposet` is written in `bash` and does not require additional dependencies besides `git` and some
+default `Unix` tools.
 
 `Reposet` supports following commands:
 - `pull`
