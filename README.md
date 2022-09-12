@@ -4,7 +4,7 @@ A flexible and simple command to deal with sets of `git` repositories.
 ![](res/screen-example.gif)
 
 
-As opposed to working on many `git` repository one after another, `reposet` runs common operations
+As opposed to working on many `git` repositories one after another, `reposet` runs common operations
 on given sets of repositories.
 `Reposet` provides convenience commands for the most common `git`-related tasks, like `push` and
 `pull`.
