@@ -181,7 +181,7 @@ Some subcommands have synonyms:
 It comes with minimal dependencies and requires little learning.
 `Reposet` is agnostic to the location the `git` repositories it acts on.
 
-There are plenty tools that do a similar job, albeit with different slightly different.
+There are plenty tools that do a similar job, albeit with different slightly approaches.
 
 ### gita
 `gita` (https://github.com/nosarthur/gita) can delegate `git` commands/aliases to one set of `git`
